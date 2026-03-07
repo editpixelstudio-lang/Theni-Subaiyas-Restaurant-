@@ -13,7 +13,7 @@ export interface IOrder extends Document {
   items: IOrderItem[];
   totalAmount: number;
   customerPhone?: string;
-  status: 'Received' | 'Preparing' | 'Ready' | 'Served';
+  status: 'Received' | 'Preparing' | 'Ready' | 'Served' | 'Delivered';
   paymentStatus: 'Pending' | 'Paid' | 'Failed';
   paymentMethod: 'UPI' | 'Card' | 'Cash';
   razorpayOrderId?: string;
@@ -34,7 +34,7 @@ const OrderSchema: Schema = new Schema({
   totalAmount: { type: Number, required: true },
   status: { 
     type: String, 
-    enum: ['Received', 'Preparing', 'Ready', 'Served'], 
+    enum: ['Received', 'Preparing', 'Ready', 'Served', 'Delivered'], 
     default: 'Received' 
   },
   paymentStatus: { 

@@ -8,7 +8,7 @@ interface Order {
   orderId: string;
   tableNumber: number;
   totalAmount: number;
-  status: 'Received' | 'Preparing' | 'Ready' | 'Served';
+  status: 'Received' | 'Preparing' | 'Ready' | 'Served' | 'Delivered';
   paymentStatus: string;
 }
 
@@ -58,8 +58,20 @@ export default function OrderTracking({ params }: { params: { id: string } }) {
 
   if (!order) return <div className="tracking-loading">Fetching order status...</div>;
 
-  const statuses = ['Received', 'Preparing', 'Ready', 'Served'];
-  const currentIndex = statuses.indexOf(order.status);
+  const steps = [
+    { id: 'Received', label: 'Order Received' },
+    { id: 'Payment', label: order.paymentStatus === 'Paid' ? 'Payment Completed' : 'Payment Pending' },
+    { id: 'Preparing', label: 'Preparing' },
+    { id: 'Ready', label: 'Ready' },
+    { id: 'Delivered', label: 'Delivered' }
+  ];
+
+  // Calculate current index in the 5/6 step sequence
+  let currentIndex = 0;
+  if (order.status === 'Received') currentIndex = order.paymentStatus === 'Paid' ? 2 : 1;
+  else if (order.status === 'Preparing') currentIndex = 2;
+  else if (order.status === 'Ready') currentIndex = 3;
+  else if (order.status === 'Served' || order.status === 'Delivered') currentIndex = 4;
 
   return (
     <div className={`tracking-container animate-fade-in theme-${settings?.bgVariant || 'light'}`}>
@@ -67,9 +79,9 @@ export default function OrderTracking({ params }: { params: { id: string } }) {
         <div className="tracking-header">
           <div className="track-id-row">
             <h2>Order Status</h2>
-            {order.paymentStatus === 'Paid' && (
-              <span className="pay-status-badge paid">PAYMENT RECEIVED ✓</span>
-            )}
+            <span className={`pay-status-badge ${order.paymentStatus.toLowerCase()}`}>
+              {order.paymentStatus === 'Paid' ? 'PAYMENT RECEIVED ✓' : 'PAYMENT PENDING ⏳'}
+            </span>
           </div>
           <p>Order #{order.orderId} • Table {order.tableNumber}</p>
         </div>
@@ -85,19 +97,19 @@ export default function OrderTracking({ params }: { params: { id: string } }) {
         )}
 
         <div className="timeline">
-          {statuses.map((status, index) => {
-            const isCompleted = index <= currentIndex;
-            const isCurrent = index === currentIndex;
+          {steps.map((step, index) => {
+            const isCompleted = index < currentIndex || (index === currentIndex && (step.id === 'Payment' ? order.paymentStatus === 'Paid' : true));
+            const isCurrent = index === currentIndex && (step.id === 'Payment' ? order.paymentStatus !== 'Paid' : true);
             
             return (
-              <div key={status} className={`timeline-item ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''}`}>
+              <div key={step.id} className={`timeline-item ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''}`}>
                 <div className="timeline-connector"></div>
                 <div className="timeline-icon">
                   {isCompleted ? '✓' : index + 1}
                 </div>
                 <div className="timeline-content">
-                  <h4>{status}</h4>
-                  <p>{getStepDescription(status)}</p>
+                  <h4>{step.label}</h4>
+                  <p>{getStepDescription(step.id, order.paymentStatus === 'Paid')}</p>
                 </div>
               </div>
             );
@@ -133,12 +145,13 @@ export default function OrderTracking({ params }: { params: { id: string } }) {
   );
 }
 
-function getStepDescription(status: string) {
-  switch(status) {
+function getStepDescription(id: string, isPaid: boolean) {
+  switch(id) {
     case 'Received': return 'Kitchen verified your order.';
+    case 'Payment': return isPaid ? 'We have received your payment.' : 'Waiting for payment confirmation.';
     case 'Preparing': return 'Our chefs are cooking it.';
     case 'Ready': return 'Ready for pickup / Waiter is bringing it.';
-    case 'Served': return 'Enjoy your meal!';
+    case 'Delivered': return 'Enjoy your meal!';
     default: return '';
   }
 }

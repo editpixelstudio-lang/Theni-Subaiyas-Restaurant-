@@ -53,6 +53,12 @@
   border: 1px solid #C8E6C9;
 }
 
+.pay-status-badge.pending {
+  background: #FFF3E0;
+  color: #E65100;
+  border: 1px solid #FFE0B2;
+}
+
 .tracking-header h2 {
   font-size: 24px;
   color: var(--primary);

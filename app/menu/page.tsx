@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import './customer.css';
+import Script from 'next/script';
 
 interface MenuItem {
   _id: string;
@@ -144,11 +145,43 @@ function CustomerMenu() {
         setCustomerPhone(''); // Clear phone after successful order
 
         if (paymentMethod === 'UPI') {
-          const restaurantUpi = settings?.upiId || process.env.NEXT_PUBLIC_UPI_ID || 'kadamalairamesh-1@oksbi';
-          // Use currentTotal instead of cartTotal which is now 0
-          const upiUrl = `upi://pay?pa=${restaurantUpi}&pn=${encodeURIComponent(settings?.restaurantName || 'TheniSubaiyas')}&am=${currentTotal}&cu=INR&tn=${encodeURIComponent('Order ' + data.order.orderId)}`;
-          setPendingOrderId({ id: data.order._id, orderId: data.order.orderId, upiUrl, totalAmount: currentTotal });
-          setShowUpiModal(true);
+          // 1. Create Razorpay Order
+          const rzpRes = await fetch('/api/razorpay', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amount: currentTotal, orderId: data.order._id }),
+          });
+          const rzpData = await rzpRes.json();
+
+          if (!rzpData.success) {
+            alert('Payment gateway failed. Please pay at counter.');
+            router.push(`/menu/track/${data.order._id}`);
+            return;
+          }
+
+          // 2. Open Razorpay Checkout
+          const options = {
+            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_fallback',
+            amount: rzpData.order.amount,
+            currency: rzpData.order.currency,
+            name: settings?.restaurantName || 'Theni Subaiyas',
+            description: `Payment for Order #${data.order.orderId}`,
+            order_id: rzpData.order.id,
+            handler: function (response: any) {
+              // Payment success - Webhook will handle DB update, 
+              // but we redirect customer to tracking immediately
+              router.push(`/menu/track/${data.order._id}`);
+            },
+            prefill: {
+              contact: customerPhone,
+            },
+            theme: {
+              color: settings?.primaryColor || '#ff5a5f',
+            },
+          };
+
+          const rzp = new (window as any).Razorpay(options);
+          rzp.open();
         } else {
           router.push(`/menu/track/${data.order._id}`);
         }
@@ -173,6 +206,7 @@ function CustomerMenu() {
 
   return (
     <div className={`customer-app theme-${activeBgVariant}`}>
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
       <div className="theme-switcher">
         <div className={`theme-opt light ${activeBgVariant === 'light' ? 'active' : ''}`} onClick={() => setActiveBgVariant('light')}>☀️</div>
         <div className={`theme-opt dark ${activeBgVariant === 'dark' ? 'active' : ''}`} onClick={() => setActiveBgVariant('dark')}>🌙</div>
@@ -287,7 +321,7 @@ function CustomerMenu() {
                   </label>
                   <label className={`radio-label ${paymentMethod === 'UPI' ? 'selected' : ''}`}>
                     <input type="radio" name="payType" value="UPI" checked={paymentMethod === 'UPI'} onChange={() => setPaymentMethod('UPI')} />
-                    <span>📱 UPI (PhonePe / GPay / Paytm)</span>
+                    <span>📱 Pay Online (UPI/Card/NetBanking)</span>
                   </label>
                 </div>
 

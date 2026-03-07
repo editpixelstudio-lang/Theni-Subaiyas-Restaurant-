@@ -118,10 +118,16 @@ export default function LiveOrders() {
         setOrders(orders.map(o => o._id === id ? { 
           ...o, 
           status: (newStatus as any) || o.status,
-          paymentStatus: newPaymentStatus || o.paymentStatus
-        } : o));
+        paymentStatus: newPaymentStatus || o.paymentStatus
+      } : o));
+      
+      // Also update orders if the status changed to 'Delivered' 
+      // it might move from active to past in a real scenario
+      if (newStatus === 'Delivered') {
+         // Refresh list after a delay or just let polling handle it
       }
-    } catch (error) {
+    }
+  } catch (error) {
       console.error('Update failed', error);
     }
   };
@@ -166,7 +172,7 @@ export default function LiveOrders() {
               <div className="order-card-header">
                 <div className="table-badge">Table {order.tableNumber}</div>
                 <div className={`pay-badge ${order.paymentStatus.toLowerCase()}`}>
-                  {order.paymentStatus === 'Pending' ? 'NOT PAID' : order.paymentStatus}
+                  {order.paymentMethod} - {order.paymentStatus === 'Pending' ? 'NOT PAID' : 'PAID'}
                 </div>
               </div>
               <div className="order-meta">
@@ -211,8 +217,8 @@ export default function LiveOrders() {
                     </button>
                   )}
                   {order.status === 'Ready' && (
-                    <button onClick={() => updateOrderStatus(order._id, 'Served')} className="btn-action serve">
-                      Serve
+                    <button onClick={() => updateOrderStatus(order._id, 'Delivered')} className="btn-action serve">
+                      Mark Delivered
                     </button>
                   )}
                   {order.customerPhone ? (
@@ -257,9 +263,9 @@ export default function LiveOrders() {
                 <span>#{order.orderId}</span>
                 <span>₹{order.totalAmount}</span>
                 <span className={`pay-badge small ${order.paymentStatus.toLowerCase()}`}>
-                  {order.paymentStatus === 'Pending' ? 'NOT PAID' : order.paymentStatus}
+                  {order.paymentMethod} - {order.paymentStatus === 'Pending' ? 'NOT PAID' : 'PAID'}
                 </span>
-                <span style={{color: '#9E9E9E'}}>Served</span>
+                <span style={{color: '#9E9E9E'}}>{order.status}</span>
               </div>
             ))}
           </div>

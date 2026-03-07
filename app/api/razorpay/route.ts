@@ -10,12 +10,15 @@ const razorpay = new Razorpay({
 
 export async function POST(req: Request) {
   try {
-    const { amount } = await req.json();
+    const { amount, orderId } = await req.json();
 
     const options = {
       amount: Math.round(amount * 100), // convert to paise
       currency: 'INR',
       receipt: `rcpt_${Date.now()}`,
+      notes: {
+        mongodbOrderId: orderId
+      }
     };
 
     const order = await razorpay.orders.create(options);
