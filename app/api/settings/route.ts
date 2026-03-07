@@ -20,12 +20,14 @@ export async function PUT(req: Request) {
   await dbConnect();
   try {
     const body = await req.json();
+    const { _id, __v, createdAt, updatedAt, ...updateData } = body;
+    
     let settings = await Settings.findOne({});
     
     if (settings) {
-      settings = await Settings.findByIdAndUpdate(settings._id, body, { new: true });
+      settings = await Settings.findByIdAndUpdate(settings._id, updateData, { new: true });
     } else {
-      settings = await Settings.create(body);
+      settings = await Settings.create(updateData);
     }
     
     return NextResponse.json({ success: true, settings }, { status: 200 });
