@@ -38,7 +38,7 @@ export async function POST(req: Request) {
           mongodbOrderId,
           { 
             paymentStatus: 'Paid',
-            status: 'Received' // Ensure status is 'Received' when paid
+            status: 'Preparing' // Auto-accept: Move to Preparing instantly
           },
           { new: true }
         );
