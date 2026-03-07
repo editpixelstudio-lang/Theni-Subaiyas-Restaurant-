@@ -105,7 +105,7 @@ export default function Reports() {
                 <td className="amount-col">₹{order.totalAmount}</td>
                 <td>
                   <span className={`badge ${order.paymentStatus.toLowerCase()}`}>
-                    {order.paymentStatus}
+                    {order.paymentStatus === 'Pending' ? 'NOT PAID' : order.paymentStatus}
                   </span>
                   <div className="pay-method-small">{order.paymentMethod}</div>
                 </td>

@@ -166,7 +166,7 @@ export default function LiveOrders() {
               <div className="order-card-header">
                 <div className="table-badge">Table {order.tableNumber}</div>
                 <div className={`pay-badge ${order.paymentStatus.toLowerCase()}`}>
-                  {order.paymentStatus}
+                  {order.paymentStatus === 'Pending' ? 'NOT PAID' : order.paymentStatus}
                 </div>
               </div>
               <div className="order-meta">
@@ -238,7 +238,7 @@ export default function LiveOrders() {
 
       <div className="summary-section card animate-slide-up">
          <div className="summary-col">
-            <span className="sum-label">Pending Payments</span>
+            <span className="sum-label">NOT PAID (Today)</span>
             <span className="sum-val warning">₹{activeOrders.filter(o => o.paymentStatus !== 'Paid').reduce((a,b) => a + b.totalAmount, 0)}</span>
          </div>
          <div className="summary-col">
@@ -256,7 +256,9 @@ export default function LiveOrders() {
                 <span>Table {order.tableNumber}</span>
                 <span>#{order.orderId}</span>
                 <span>₹{order.totalAmount}</span>
-                <span className={`pay-badge small ${order.paymentStatus.toLowerCase()}`}>{order.paymentStatus}</span>
+                <span className={`pay-badge small ${order.paymentStatus.toLowerCase()}`}>
+                  {order.paymentStatus === 'Pending' ? 'NOT PAID' : order.paymentStatus}
+                </span>
                 <span style={{color: '#9E9E9E'}}>Served</span>
               </div>
             ))}
