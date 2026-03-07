@@ -111,7 +111,8 @@ function CustomerMenu() {
 
         if (paymentMethod === 'UPI') {
           const restaurantUpi = process.env.NEXT_PUBLIC_UPI_ID || 'kadamalairamesh-1@oksbi';
-          const upiUrl = `upi://pay?pa=${restaurantUpi}&pn=TheniSubaiyas&am=${cartTotal}&cu=INR&tn=Order%20${data.order.orderId}`;
+          // Use raw string first, will be encoded for the QR API
+          const upiUrl = `upi://pay?pa=${restaurantUpi}&pn=TheniSubaiyas&am=${cartTotal}&cu=INR&tn=Order ${data.order.orderId}`;
           setPendingOrderId({ id: data.order._id, orderId: data.order.orderId, upiUrl });
           setShowUpiModal(true);
         } else {
@@ -190,7 +191,7 @@ function CustomerMenu() {
       {cart.length > 0 && !isCartOpen && (
         <div className="floating-cart" onClick={() => setIsCartOpen(true)}>
           <div className="cart-badge">{cart.reduce((a, b) => a + b.quantity, 0)} items</div>
-          <div className="cart-total">View Cart • ₹{cartTotal}</div>
+          <div className="cart-total">View Cart • ₹{Number(cartTotal).toFixed(0)}</div>
         </div>
       )}
 
@@ -210,7 +211,7 @@ function CustomerMenu() {
                 <div key={item._id} className="cart-item">
                   <div className="cart-item-info">
                     <h4>{item.name}</h4>
-                    <span>₹{item.price}</span>
+                    <span>₹{Number(item.price).toFixed(0)}</span>
                   </div>
                   <div className="quantity-controls">
                     <button onClick={() => updateQuantity(item._id, -1)}>-</button>
@@ -225,9 +226,9 @@ function CustomerMenu() {
           {cart.length > 0 && (
             <div className="cart-footer">
               <div className="bill-summary">
-                <div className="bill-row"><span>Item Total</span><span>₹{cartTotal}</span></div>
+                <div className="bill-row"><span>Item Total</span><span>₹{Number(cartTotal).toFixed(0)}</span></div>
                 <div className="bill-row"><span>Taxes & Charges</span><span>Included</span></div>
-                <div className="bill-row grand-total"><span>To Pay</span><span>₹{cartTotal}</span></div>
+                <div className="bill-row grand-total"><span>To Pay</span><span>₹{Number(cartTotal).toFixed(0)}</span></div>
               </div>
 
               <div className="payment-options">
@@ -261,7 +262,7 @@ function CustomerMenu() {
                 onClick={placeOrder}
                 disabled={checkoutLoading}
               >
-                {checkoutLoading ? 'Processing...' : `Place Order • ₹${cartTotal}`}
+                {checkoutLoading ? 'Processing...' : `Place Order • ₹${Number(cartTotal).toFixed(0)}`}
               </button>
             </div>
           )}
@@ -287,7 +288,7 @@ function CustomerMenu() {
             </div>
 
             <div className="upi-amount-display">
-              ₹{cartTotal || 0}
+              ₹{Number(cartTotal).toFixed(0)}
             </div>
 
             <a
