@@ -8,11 +8,13 @@
   --primary: #E53935;
   --primary-dark: #B71C1C;
   --accent: #FF7043;
+  --accent-dark: #F4511E;
   --green: #00897B;
   --text-dark: #1A1A2E;
   --text-muted: #6B7280;
   --bg: #F5F5F7;
-  --card-bg: #FFFFFF;
+  --white: #FFFFFF;
+  --card-bg: var(--white);
   --radius: 18px;
   --radius-sm: 10px;
   --font: 'Outfit', sans-serif;
@@ -108,8 +110,9 @@
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ---- Header ---- */
+/* ---- Header ---- */
 .mobile-header {
-  background: linear-gradient(135deg, #1A1A2E 0%, #16213E 60%, #0F3460 100%);
+  background: linear-gradient(135deg, var(--text-dark) 0%, #16213E 60%, var(--primary) 100%);
   padding: 20px 20px 28px;
   position: sticky;
   top: 0;
@@ -304,7 +307,7 @@
 }
 
 .add-btn {
-  background: var(--primary);
+  background: linear-gradient(135deg, var(--primary), var(--accent));
   border: none;
   color: white;
   width: 34px;
@@ -318,7 +321,7 @@
   line-height: 1;
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.15s;
-  box-shadow: 0 4px 8px rgba(229, 57, 53, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .add-btn:active {
@@ -341,7 +344,7 @@
   transform: translateX(-50%);
   width: calc(100% - 32px);
   max-width: 498px;
-  background: linear-gradient(135deg, #1A1A2E, #0F3460);
+  background: linear-gradient(135deg, var(--text-dark), var(--primary));
   color: white;
   padding: 16px 22px;
   border-radius: 18px;
@@ -629,7 +632,7 @@
 .checkout-btn {
   width: 100%;
   padding: 16px;
-  background: linear-gradient(135deg, #E53935, #B71C1C);
+  background: linear-gradient(135deg, var(--primary), var(--accent));
   color: white;
   border: none;
   border-radius: 14px;
@@ -752,3 +755,40 @@
   font-family: var(--font);
   box-shadow: 0 4px 12px rgba(0,137,123,0.3);
 }
+
+/* Theme Switcher */
+.theme-switcher {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  display: flex;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 6px;
+  border-radius: 50px;
+  backdrop-filter: blur(5px);
+  z-index: 100;
+}
+
+.theme-opt {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: 0.2s;
+}
+
+.theme-opt.active {
+  border-color: white;
+  transform: scale(1.1);
+}
+
+.theme-opt.light { background: #FFFFFF; color: #333; }
+.theme-opt.dark { background: #333333; color: #FFF; }
+.theme-opt.glass { background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%); color: #FFF; }
+

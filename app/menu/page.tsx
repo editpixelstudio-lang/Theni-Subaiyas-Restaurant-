@@ -26,6 +26,7 @@ function CustomerMenu() {
   const [items, setItems] = useState<MenuItem[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>('All');
+  const [activeBgVariant, setActiveBgVariant] = useState<string>('light');
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -48,8 +49,9 @@ function CustomerMenu() {
   useEffect(() => {
     // Fetch Settings
     fetch('/api/settings').then(res => res.json()).then(data => {
-      if (data.success) {
+      if (data.success && data.settings) {
         setSettings(data.settings);
+        setActiveBgVariant(data.settings.bgVariant || 'light');
         // Inject dynamic theme
         if (data.settings.primaryColor) {
           document.documentElement.style.setProperty('--primary', data.settings.primaryColor);
@@ -58,7 +60,7 @@ function CustomerMenu() {
           document.documentElement.style.setProperty('--accent', data.settings.accentColor);
         }
       }
-    });
+    }).catch(err => console.error("Error fetching settings:", err));
 
     fetch('/api/menu')
       .then(res => res.json())
@@ -161,7 +163,12 @@ function CustomerMenu() {
   }
 
   return (
-    <div className={`customer-app theme-${settings?.bgVariant || 'light'}`}>
+    <div className={`customer-app theme-${activeBgVariant}`}>
+      <div className="theme-switcher">
+        <div className={`theme-opt light ${activeBgVariant === 'light' ? 'active' : ''}`} onClick={() => setActiveBgVariant('light')}>☀️</div>
+        <div className={`theme-opt dark ${activeBgVariant === 'dark' ? 'active' : ''}`} onClick={() => setActiveBgVariant('dark')}>🌙</div>
+        <div className={`theme-opt glass ${activeBgVariant === 'glass' ? 'active' : ''}`} onClick={() => setActiveBgVariant('glass')}>💎</div>
+      </div>
       <header className="mobile-header">
         {settings?.logoUrl && <img src={settings.logoUrl} alt="Logo" className="restaurant-logo-header" />}
         <div className="header-info">
