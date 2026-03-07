@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/db';
 import MenuItem from '@/models/MenuItem';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     console.log("Connecting to DB...");
