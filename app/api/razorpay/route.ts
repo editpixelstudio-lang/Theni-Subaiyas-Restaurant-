@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
 
+export const dynamic = 'force-dynamic';
+
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_fallbackkey',
   key_secret: process.env.RAZORPAY_KEY_SECRET || 'fallback_secret',
