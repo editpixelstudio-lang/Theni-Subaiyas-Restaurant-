@@ -9,9 +9,8 @@ interface Settings {
   address: string;
   logoUrl: string;
   upiId: string;
-  primaryColor: string;
-  accentColor: string;
   bgVariant: 'light' | 'dark' | 'glass';
+  headerColor: string;
 }
 
 export default function SettingsPage() {
@@ -23,7 +22,8 @@ export default function SettingsPage() {
     upiId: '',
     primaryColor: '#E53935',
     accentColor: '#FF7043',
-    bgVariant: 'light'
+    bgVariant: 'light',
+    headerColor: '#1A1A2E'
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -183,6 +183,23 @@ export default function SettingsPage() {
             </div>
 
             <div className="form-group">
+              <label>Header / Top Bar Color</label>
+              <div className="color-picker-wrap">
+                <input 
+                  type="color" 
+                  value={settings.headerColor} 
+                  onChange={e => setSettings({...settings, headerColor: e.target.value})}
+                />
+                <input 
+                  type="text" 
+                  value={settings.headerColor} 
+                  onChange={e => setSettings({...settings, headerColor: e.target.value})}
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+
               <label>Background Style</label>
               <select 
                 value={settings.bgVariant} 

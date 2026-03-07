@@ -9,6 +9,7 @@ export interface ISettings extends Document {
   primaryColor: string;
   accentColor: string;
   bgVariant: 'light' | 'dark' | 'glass';
+  headerColor: string;
 }
 
 const SettingsSchema: Schema = new Schema({
@@ -20,6 +21,7 @@ const SettingsSchema: Schema = new Schema({
   primaryColor: { type: String, default: '#E53935' },
   accentColor: { type: String, default: '#FF7043' },
   bgVariant: { type: String, enum: ['light', 'dark', 'glass'], default: 'light' },
+  headerColor: { type: String, default: 'linear-gradient(135deg, #1A1A2E 0%, #16213E 60%, #0F3460 100%)' },
 }, { timestamps: true });
 
 export default mongoose.models.Settings || mongoose.model<ISettings>('Settings', SettingsSchema);

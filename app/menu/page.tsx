@@ -44,6 +44,7 @@ function CustomerMenu() {
     primaryColor: string;
     accentColor: string;
     bgVariant: string;
+    headerColor: string;
   } | null>(null);
 
   useEffect(() => {
@@ -58,6 +59,9 @@ function CustomerMenu() {
         }
         if (data.settings.accentColor) {
           document.documentElement.style.setProperty('--accent', data.settings.accentColor);
+        }
+        if (data.settings.headerColor) {
+          document.documentElement.style.setProperty('--header-bg', data.settings.headerColor);
         }
       }
     }).catch(err => console.error("Error fetching settings:", err));
