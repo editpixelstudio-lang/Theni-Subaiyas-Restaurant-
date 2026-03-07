@@ -133,6 +133,11 @@
 .pay-badge.paid { background: #E8F5E9; color: #2E7D32; border: 1px solid #C8E6C9; }
 .pay-badge.pending { background: #FFF3E0; color: #E65100; border: 1px solid #FFE0B2; }
 
+.pay-badge.small {
+  font-size: 8px;
+  padding: 2px 5px;
+}
+
 .order-items {
   display: flex;
   flex-direction: column;

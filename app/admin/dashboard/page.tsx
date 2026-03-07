@@ -165,18 +165,16 @@ export default function LiveOrders() {
             <div key={order._id} className={`order-card status-${order.status.toLowerCase()}`}>
               <div className="order-card-header">
                 <div className="table-badge">Table {order.tableNumber}</div>
-                <div className="order-time">
-                  {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                <div className={`pay-badge ${order.paymentStatus.toLowerCase()}`}>
+                  {order.paymentStatus}
                 </div>
               </div>
               <div className="order-meta">
                 <span className="order-id">#{order.orderId}</span>
-                <div className="payment-stack">
-                  <span className="order-amount">₹{order.totalAmount}</span>
-                  <span className={`pay-badge ${order.paymentStatus.toLowerCase()}`}>
-                    {order.paymentStatus}
-                  </span>
-                </div>
+                <span className="order-time">
+                  {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </span>
+                <span className="order-amount">₹{order.totalAmount}</span>
               </div>
               <div className="order-items">
                 {order.items.map((item, idx) => (
@@ -258,6 +256,7 @@ export default function LiveOrders() {
                 <span>Table {order.tableNumber}</span>
                 <span>#{order.orderId}</span>
                 <span>₹{order.totalAmount}</span>
+                <span className={`pay-badge small ${order.paymentStatus.toLowerCase()}`}>{order.paymentStatus}</span>
                 <span style={{color: '#9E9E9E'}}>Served</span>
               </div>
             ))}
