@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import './customer.css';
 
@@ -18,7 +18,7 @@ interface CartItem extends MenuItem {
   quantity: number;
 }
 
-export default function CustomerMenu() {
+function CustomerMenu() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const tableNumber = searchParams.get('table') || 'Takeaway';
@@ -311,5 +311,18 @@ export default function CustomerMenu() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function MenuPage() {
+  return (
+    <Suspense fallback={
+      <div className="mobile-loading">
+        <div className="spinner"></div>
+        <p>Loading the menu...</p>
+      </div>
+    }>
+      <CustomerMenu />
+    </Suspense>
   );
 }
