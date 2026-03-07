@@ -32,6 +32,7 @@ function CustomerMenu() {
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [activeOrderId, setActiveOrderId] = useState<string | null>(null);
+  const [cartBouncing, setCartBouncing] = useState(false);
   const [customerPhone, setCustomerPhone] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'Cash' | 'UPI'>('Cash');
   const [showUpiModal, setShowUpiModal] = useState(false);
@@ -93,6 +94,8 @@ function CustomerMenu() {
   const addToCart = (item: MenuItem) => {
     setCart(prev => {
       const existing = prev.find(i => i._id === item._id);
+      setCartBouncing(true);
+      setTimeout(() => setCartBouncing(false), 400);
       if (existing) {
         return prev.map(i => i._id === item._id ? { ...i, quantity: i.quantity + 1 } : i);
       }
@@ -204,8 +207,12 @@ function CustomerMenu() {
       </div>
 
       <main className="menu-items-grid">
-        {displayedItems.map(item => (
-          <div key={item._id} className="food-card animate-slide-up">
+        {displayedItems.map((item, index) => (
+          <div 
+            key={item._id} 
+            className="food-card"
+            style={{ animationDelay: `${index * 0.08}s` }}
+          >
             <div className="food-image">
               <img src={item.imageUrl || '/placeholder.png'} alt={item.name} />
             </div>
@@ -226,7 +233,10 @@ function CustomerMenu() {
 
       {/* Floating Cart Button */}
       {cart.length > 0 && !isCartOpen && (
-        <div className="floating-cart" onClick={() => setIsCartOpen(true)}>
+        <div 
+          className={`floating-cart ${cartBouncing ? 'item-added' : ''}`} 
+          onClick={() => setIsCartOpen(true)}
+        >
           <div className="cart-badge">{cart.reduce((a, b) => a + b.quantity, 0)} items</div>
           <div className="cart-total">View Cart • ₹{Number(cartTotal).toFixed(0)}</div>
         </div>
@@ -317,7 +327,7 @@ function CustomerMenu() {
 
             <div className="upi-qr-wrap">
               <img
-                src={`https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=${encodeURIComponent(pendingOrderId.upiUrl)}&choe=UTF-8`}
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pendingOrderId.upiUrl)}&margin=10&bgcolor=ffffff&color=2c3e50`}
                 alt="UPI QR Code"
                 className="upi-qr-img"
               />
