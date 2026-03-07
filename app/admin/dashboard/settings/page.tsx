@@ -9,6 +9,8 @@ interface Settings {
   address: string;
   logoUrl: string;
   upiId: string;
+  primaryColor: string;
+  accentColor: string;
   bgVariant: 'light' | 'dark' | 'glass';
   headerColor: string;
 }
