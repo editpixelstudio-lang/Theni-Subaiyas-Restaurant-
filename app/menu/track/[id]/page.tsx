@@ -13,12 +13,27 @@ interface Order {
 
 export default function OrderTracking({ params }: { params: { id: string } }) {
   const [order, setOrder] = useState<Order | null>(null);
-  const [settings, setSettings] = useState<{ mobileNumber: string; restaurantName: string } | null>(null);
+  const [settings, setSettings] = useState<{ 
+    mobileNumber: string; 
+    restaurantName: string;
+    primaryColor: string;
+    accentColor: string;
+    bgVariant: string;
+  } | null>(null);
   
   useEffect(() => {
     // Fetch Settings
     fetch('/api/settings').then(res => res.json()).then(data => {
-      if (data.success) setSettings(data.settings);
+      if (data.success) {
+        setSettings(data.settings);
+        // Inject dynamic theme
+        if (data.settings.primaryColor) {
+          document.documentElement.style.setProperty('--primary', data.settings.primaryColor);
+        }
+        if (data.settings.accentColor) {
+          document.documentElement.style.setProperty('--accent', data.settings.accentColor);
+        }
+      }
     });
 
     // Poll the status
@@ -46,7 +61,7 @@ export default function OrderTracking({ params }: { params: { id: string } }) {
   const currentIndex = statuses.indexOf(order.status);
 
   return (
-    <div className="tracking-container animate-fade-in">
+    <div className={`tracking-container animate-fade-in theme-${settings?.bgVariant || 'light'}`}>
       <div className="tracking-card">
         <div className="tracking-header">
           <h2>Order Status</h2>

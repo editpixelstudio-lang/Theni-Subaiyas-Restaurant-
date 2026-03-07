@@ -16,6 +16,29 @@
   --radius: 18px;
   --radius-sm: 10px;
   --font: 'Outfit', sans-serif;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---- Theme Variants ---- */
+.theme-dark {
+  --bg: #121212;
+  --card-bg: #1E1E1E;
+  --text-dark: #FFFFFF;
+  --text-muted: #A0A0A0;
+}
+
+.theme-dark .food-card {
+  border: 1px solid #333;
+}
+
+.theme-glass .customer-app {
+  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+}
+
+.theme-glass .food-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 /* ---- Base ---- */

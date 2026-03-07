@@ -35,12 +35,29 @@ function CustomerMenu() {
   const [paymentMethod, setPaymentMethod] = useState<'Cash' | 'UPI'>('Cash');
   const [showUpiModal, setShowUpiModal] = useState(false);
   const [pendingOrderId, setPendingOrderId] = useState<{ id: string; orderId: string; upiUrl: string } | null>(null);
-  const [settings, setSettings] = useState<{ restaurantName: string; logoUrl: string, upiId: string, mobileNumber: string } | null>(null);
+  const [settings, setSettings] = useState<{ 
+    restaurantName: string; 
+    logoUrl: string; 
+    upiId: string; 
+    mobileNumber: string;
+    primaryColor: string;
+    accentColor: string;
+    bgVariant: string;
+  } | null>(null);
 
   useEffect(() => {
     // Fetch Settings
     fetch('/api/settings').then(res => res.json()).then(data => {
-      if (data.success) setSettings(data.settings);
+      if (data.success) {
+        setSettings(data.settings);
+        // Inject dynamic theme
+        if (data.settings.primaryColor) {
+          document.documentElement.style.setProperty('--primary', data.settings.primaryColor);
+        }
+        if (data.settings.accentColor) {
+          document.documentElement.style.setProperty('--accent', data.settings.accentColor);
+        }
+      }
     });
 
     fetch('/api/menu')
@@ -144,7 +161,7 @@ function CustomerMenu() {
   }
 
   return (
-    <div className="customer-app">
+    <div className={`customer-app theme-${settings?.bgVariant || 'light'}`}>
       <header className="mobile-header">
         {settings?.logoUrl && <img src={settings.logoUrl} alt="Logo" className="restaurant-logo-header" />}
         <div className="header-info">
