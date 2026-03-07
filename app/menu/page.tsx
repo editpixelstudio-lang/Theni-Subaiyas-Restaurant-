@@ -36,8 +36,6 @@ function CustomerMenu() {
   const [cartBouncing, setCartBouncing] = useState(false);
   const [customerPhone, setCustomerPhone] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'Cash' | 'UPI'>('Cash');
-  const [showUpiModal, setShowUpiModal] = useState(false);
-  const [pendingOrderId, setPendingOrderId] = useState<{ id: string; orderId: string; upiUrl: string; totalAmount: number } | null>(null);
   const [settings, setSettings] = useState<{ 
     restaurantName: string; 
     logoUrl: string; 
@@ -154,14 +152,14 @@ function CustomerMenu() {
           const rzpData = await rzpRes.json();
 
           if (!rzpData.success) {
-            alert('Payment gateway failed. Please pay at counter.');
+            alert(`[NEW v2] Payment gateway error: ${rzpData.error || 'Failed to initialize'}. Please check your Razorpay API keys in .env.local.`);
             router.push(`/menu/track/${data.order._id}`);
             return;
           }
 
           // 2. Open Razorpay Checkout
           const options = {
-            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_fallback',
+            key: rzpData.key_id,
             amount: rzpData.order.amount,
             currency: rzpData.order.currency,
             name: settings?.restaurantName || 'Theni Subaiyas',
@@ -215,7 +213,7 @@ function CustomerMenu() {
       <header className="mobile-header">
         {settings?.logoUrl && <img src={settings.logoUrl} alt="Logo" className="restaurant-logo-header" />}
         <div className="header-info">
-          <h1>{settings?.restaurantName || 'Theni Subaiyas'}</h1>
+          <h1>{settings?.restaurantName || 'Theni Subaiyas'} <span className="version-badge">v2.0</span></h1>
           <p className="table-info">Table: <span>{tableNumber}</span></p>
         </div>
         {activeOrderId && (
@@ -336,6 +334,21 @@ function CustomerMenu() {
                     className="phone-input"
                   />
                 </div>
+
+                <div className="secure-payment-info">
+                  <div className="secure-badge">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                      <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M9 12L11 14L15 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <span>100% Secure SSL Encryption</span>
+                  </div>
+                  {paymentMethod === 'UPI' && (
+                    <div className="powered-by">
+                      Powered by <span className="razorpay-text">Razorpay</span>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <button 
@@ -350,48 +363,6 @@ function CustomerMenu() {
         </div>
       </div>
 
-      {/* UPI Payment Modal */}
-      {showUpiModal && pendingOrderId && (
-        <div className="upi-modal-overlay">
-          <div className="upi-modal">
-            <div className="upi-modal-header">
-              <h2>📱 Pay via UPI</h2>
-              <p>Order #{pendingOrderId.orderId}</p>
-            </div>
-
-            <div className="upi-qr-wrap">
-              <img
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pendingOrderId.upiUrl)}&margin=10&bgcolor=ffffff&color=2c3e50`}
-                alt="UPI QR Code"
-                className="upi-qr-img"
-              />
-              <p className="upi-scan-hint">Scan with PhonePe / GPay / Paytm / Any UPI App</p>
-            </div>
-
-            <div className="upi-amount-display">
-              ₹{Number(pendingOrderId.totalAmount).toFixed(0)}
-            </div>
-
-            <a
-              href={pendingOrderId.upiUrl}
-              className="btn-pay-now"
-              onClick={() => setTimeout(() => setShowUpiModal(false), 500)}
-            >
-              📲 Open UPI App Directly
-            </a>
-
-            <button
-              className="btn-paid"
-              onClick={() => {
-                setShowUpiModal(false);
-                router.push(`/menu/track/${pendingOrderId.id}`);
-              }}
-            >
-              ✅ I Have Paid – Track My Order
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

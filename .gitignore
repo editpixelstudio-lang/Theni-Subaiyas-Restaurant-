@@ -13,6 +13,7 @@ out/
 
 # Debug logs
 npm-debug.log*
+test-razorpay.js
 
 # OS files
 .DS_Store

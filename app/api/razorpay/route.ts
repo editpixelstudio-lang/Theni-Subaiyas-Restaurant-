@@ -11,6 +11,7 @@ const razorpay = new Razorpay({
 export async function POST(req: Request) {
   try {
     const { amount, orderId } = await req.json();
+    console.log(`Creating Razorpay order for: ${amount}, MongoID: ${orderId}`);
 
     const options = {
       amount: Math.round(amount * 100), // convert to paise
@@ -22,10 +23,19 @@ export async function POST(req: Request) {
     };
 
     const order = await razorpay.orders.create(options);
-    return NextResponse.json({ success: true, order }, { status: 200 });
+    console.log(`Razorpay Order created: ${order.id}`);
+    
+    return NextResponse.json({ 
+      success: true, 
+      order, 
+      key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_fallbackkey' 
+    }, { status: 200 });
 
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ success: false, error: 'Failed to create Razorpay order' }, { status: 500 });
+  } catch (error: any) {
+    console.error('Razorpay Order Error:', error);
+    return NextResponse.json({ 
+      success: false, 
+      error: error.message || 'Failed to create Razorpay order' 
+    }, { status: 500 });
   }
 }

@@ -148,6 +148,16 @@
   color: rgba(255,255,255,0.6);
 }
 
+.version-badge {
+  font-size: 10px;
+  background: rgba(255,255,255,0.2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  vertical-align: middle;
+  margin-left: 5px;
+  font-weight: 500;
+}
+
 .table-info span {
   color: #FFC107;
   font-weight: 700;
@@ -805,3 +815,32 @@
 .theme-opt.dark { background: #333333; color: #FFF; }
 .theme-opt.glass { background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%); color: #FFF; }
 
+.secure-payment-info {
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.secure-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #2e7d32;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.powered-by {
+  font-size: 11px;
+  color: #757575;
+}
+
+.razorpay-text {
+  color: #2b2f33;
+  font-weight: 700;
+}
