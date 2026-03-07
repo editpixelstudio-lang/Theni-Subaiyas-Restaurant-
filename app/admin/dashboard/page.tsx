@@ -27,6 +27,7 @@ export default function LiveOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [soundEnabled, setSoundEnabled] = useState(false);
+  const [settings, setSettings] = useState<{ restaurantName: string } | null>(null);
   
   // Keep track of order IDs we've already "seen" to avoid repeated ringing
   const knownOrderIds = useRef<Set<string>>(new Set());
@@ -84,8 +85,19 @@ export default function LiveOrders() {
     }
   };
 
+  const fetchSettings = async () => {
+    try {
+      const res = await fetch('/api/settings');
+      const data = await res.json();
+      if (data.success) setSettings(data.settings);
+    } catch (err) {
+      console.error('Failed to fetch settings');
+    }
+  };
+
   useEffect(() => {
     fetchOrders(true);
+    fetchSettings();
     const interval = setInterval(() => fetchOrders(false), 5000); // Poll every 5s
     return () => clearInterval(interval);
   }, [soundEnabled]);
@@ -189,7 +201,8 @@ export default function LiveOrders() {
                       className="btn-action whatsapp-bill"
                       onClick={() => {
                         const itemLines = order.items.map(i => `  - ${i.name} x${i.quantity} = ₹${i.price * i.quantity}`).join('\n');
-                        const msg = `🧾 *Bill from Theni Subaiyas Restaurant*\n\n*Order:* #${order.orderId}\n*Table:* ${order.tableNumber}\n\n*Items:*\n${itemLines}\n\n*Total: ₹${order.totalAmount}*\n\nThank you for dining with us! 🙏`;
+                        const restaurantName = settings?.restaurantName || 'Theni Subaiyas';
+                        const msg = `🧾 *Bill from ${restaurantName}*\n\n*Order:* #${order.orderId}\n*Table:* ${order.tableNumber}\n\n*Items:*\n${itemLines}\n\n*Total: ₹${order.totalAmount}*\n\nThank you for dining with us! 🙏`;
                         window.open(`https://wa.me/91${order.customerPhone}?text=${encodeURIComponent(msg)}`, '_blank');
                       }}
                     >

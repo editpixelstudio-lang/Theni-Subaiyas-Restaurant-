@@ -35,8 +35,14 @@ function CustomerMenu() {
   const [paymentMethod, setPaymentMethod] = useState<'Cash' | 'UPI'>('Cash');
   const [showUpiModal, setShowUpiModal] = useState(false);
   const [pendingOrderId, setPendingOrderId] = useState<{ id: string; orderId: string; upiUrl: string } | null>(null);
+  const [settings, setSettings] = useState<{ restaurantName: string; logoUrl: string, upiId: string, mobileNumber: string } | null>(null);
 
   useEffect(() => {
+    // Fetch Settings
+    fetch('/api/settings').then(res => res.json()).then(data => {
+      if (data.success) setSettings(data.settings);
+    });
+
     fetch('/api/menu')
       .then(res => res.json())
       .then(data => {
@@ -110,9 +116,9 @@ function CustomerMenu() {
         setIsCartOpen(false);
 
         if (paymentMethod === 'UPI') {
-          const restaurantUpi = process.env.NEXT_PUBLIC_UPI_ID || 'kadamalairamesh-1@oksbi';
+          const restaurantUpi = settings?.upiId || process.env.NEXT_PUBLIC_UPI_ID || 'kadamalairamesh-1@oksbi';
           // Use raw string first, will be encoded for the QR API
-          const upiUrl = `upi://pay?pa=${restaurantUpi}&pn=TheniSubaiyas&am=${cartTotal}&cu=INR&tn=Order ${data.order.orderId}`;
+          const upiUrl = `upi://pay?pa=${restaurantUpi}&pn=${encodeURIComponent(settings?.restaurantName || 'TheniSubaiyas')}&am=${cartTotal}&cu=INR&tn=Order ${data.order.orderId}`;
           setPendingOrderId({ id: data.order._id, orderId: data.order.orderId, upiUrl });
           setShowUpiModal(true);
         } else {
@@ -140,8 +146,9 @@ function CustomerMenu() {
   return (
     <div className="customer-app">
       <header className="mobile-header">
+        {settings?.logoUrl && <img src={settings.logoUrl} alt="Logo" className="restaurant-logo-header" />}
         <div className="header-info">
-          <h1>Theni Subaiyas</h1>
+          <h1>{settings?.restaurantName || 'Theni Subaiyas'}</h1>
           <p className="table-info">Table: <span>{tableNumber}</span></p>
         </div>
         {activeOrderId && (

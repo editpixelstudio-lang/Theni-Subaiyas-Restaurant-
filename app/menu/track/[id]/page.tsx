@@ -13,8 +13,14 @@ interface Order {
 
 export default function OrderTracking({ params }: { params: { id: string } }) {
   const [order, setOrder] = useState<Order | null>(null);
+  const [settings, setSettings] = useState<{ mobileNumber: string; restaurantName: string } | null>(null);
   
   useEffect(() => {
+    // Fetch Settings
+    fetch('/api/settings').then(res => res.json()).then(data => {
+      if (data.success) setSettings(data.settings);
+    });
+
     // Poll the status
     const fetchStatus = async () => {
       try {
@@ -73,8 +79,9 @@ export default function OrderTracking({ params }: { params: { id: string } }) {
           <button 
             className="btn-whatsapp"
             onClick={() => {
-              const text = `Hello Theni Subaiyas!\nI just placed an order.\n\n*Order ID:* ${order.orderId}\n*Table:* ${order.tableNumber}\n*Total:* ₹${order.totalAmount}\n\nPlease confirm!`;
-              window.open(`https://wa.me/919876543210?text=${encodeURIComponent(text)}`, '_blank');
+              const text = `Hello ${settings?.restaurantName || 'Theni Subaiyas'}!\nI just placed an order.\n\n*Order ID:* ${order.orderId}\n*Table:* ${order.tableNumber}\n*Total:* ₹${order.totalAmount}\n\nPlease confirm!`;
+              const phone = settings?.mobileNumber || '9876543210';
+              window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(text)}`, '_blank');
             }}
           >
             <svg xmlns="http://www.3000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style={{ marginRight: '8px' }}>

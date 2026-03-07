@@ -19,6 +19,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     {name: 'Menu Management', path: '/admin/dashboard/menu'},
     { name: 'QR Codes', path: '/admin/dashboard/qr' },
     { name: 'Reports', path: '/admin/dashboard/reports' },
+    { name: 'Settings', path: '/admin/dashboard/settings' },
   ];
 
   return (
