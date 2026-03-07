@@ -9,6 +9,9 @@ interface Settings {
   address: string;
   logoUrl: string;
   upiId: string;
+  primaryColor: string;
+  accentColor: string;
+  bgVariant: 'light' | 'dark' | 'glass';
 }
 
 export default function SettingsPage() {
@@ -17,7 +20,10 @@ export default function SettingsPage() {
     mobileNumber: '',
     address: '',
     logoUrl: '',
-    upiId: ''
+    upiId: '',
+    primaryColor: '#E53935',
+    accentColor: '#FF7043',
+    bgVariant: 'light'
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -56,7 +62,7 @@ export default function SettingsPage() {
       if (data.success) {
         setMessage({ type: 'success', text: 'Settings updated successfully!' });
       } else {
-        setMessage({ type: 'error', text: 'Failed to update settings' });
+        setMessage({ type: 'error', text: data.details || data.error || 'Failed to update settings' });
       }
     } catch (err) {
       setMessage({ type: 'error', text: 'An error occurred' });
@@ -137,6 +143,55 @@ export default function SettingsPage() {
                 onChange={e => setSettings({...settings, upiId: e.target.value})}
                 placeholder="restaurant@upi"
               />
+            </div>
+          </div>
+        </div>
+
+        <div className="theme-customization form-section card">
+          <h3>Website Theme Customization</h3>
+          <div className="theme-grid">
+            <div className="form-group">
+              <label>Primary Theme Color</label>
+              <div className="color-picker-wrap">
+                <input 
+                  type="color" 
+                  value={settings.primaryColor} 
+                  onChange={e => setSettings({...settings, primaryColor: e.target.value})}
+                />
+                <input 
+                  type="text" 
+                  value={settings.primaryColor} 
+                  onChange={e => setSettings({...settings, primaryColor: e.target.value})}
+                />
+              </div>
+            </div>
+            
+            <div className="form-group">
+              <label>Accent Color</label>
+              <div className="color-picker-wrap">
+                <input 
+                  type="color" 
+                  value={settings.accentColor} 
+                  onChange={e => setSettings({...settings, accentColor: e.target.value})}
+                />
+                <input 
+                  type="text" 
+                  value={settings.accentColor} 
+                  onChange={e => setSettings({...settings, accentColor: e.target.value})}
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Background Style</label>
+              <select 
+                value={settings.bgVariant} 
+                onChange={e => setSettings({...settings, bgVariant: e.target.value as any})}
+              >
+                <option value="light">Simple Light</option>
+                <option value="dark">Professional Dark</option>
+                <option value="glass">Modern Glassmorphism</option>
+              </select>
             </div>
           </div>
         </div>

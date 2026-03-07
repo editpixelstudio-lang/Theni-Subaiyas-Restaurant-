@@ -6,6 +6,9 @@ export interface ISettings extends Document {
   address: string;
   logoUrl?: string;
   upiId?: string;
+  primaryColor: string;
+  accentColor: string;
+  bgVariant: 'light' | 'dark' | 'glass';
 }
 
 const SettingsSchema: Schema = new Schema({
@@ -14,6 +17,9 @@ const SettingsSchema: Schema = new Schema({
   address: { type: String, required: true, default: 'Theni, Tamil Nadu' },
   logoUrl: { type: String, default: '' },
   upiId: { type: String, default: 'kadamalairamesh-1@oksbi' },
+  primaryColor: { type: String, default: '#E53935' },
+  accentColor: { type: String, default: '#FF7043' },
+  bgVariant: { type: String, enum: ['light', 'dark', 'glass'], default: 'light' },
 }, { timestamps: true });
 
 export default mongoose.models.Settings || mongoose.model<ISettings>('Settings', SettingsSchema);

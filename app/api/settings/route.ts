@@ -29,7 +29,12 @@ export async function PUT(req: Request) {
     }
     
     return NextResponse.json({ success: true, settings }, { status: 200 });
-  } catch (error) {
-    return NextResponse.json({ success: false, error: 'Failed to update settings' }, { status: 500 });
+  } catch (error: any) {
+    console.error('Settings Update Error:', error);
+    return NextResponse.json({ 
+      success: false, 
+      error: 'Failed to update settings',
+      details: error.message 
+    }, { status: 500 });
   }
 }
