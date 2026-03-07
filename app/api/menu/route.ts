@@ -1,0 +1,25 @@
+import { NextResponse } from 'next/server';
+import dbConnect from '@/lib/db';
+import MenuItem from '@/models/MenuItem';
+
+export async function GET() {
+  await dbConnect();
+  try {
+    const items = await MenuItem.find({}).sort({ category: 1, name: 1 });
+    return NextResponse.json({ success: true, items }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: 'Failed to fetch menu items' }, { status: 500 });
+  }
+}
+
+export async function POST(req: Request) {
+  await dbConnect();
+  try {
+    const body = await req.json();
+    const newItem = new MenuItem(body);
+    const savedItem = await newItem.save();
+    return NextResponse.json({ success: true, item: savedItem }, { status: 201 });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: 'Failed to create menu item' }, { status: 500 });
+  }
+}

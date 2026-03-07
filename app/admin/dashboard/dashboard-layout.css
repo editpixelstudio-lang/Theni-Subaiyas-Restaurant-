@@ -1,0 +1,126 @@
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+}
+
+.dashboard-sidebar {
+  width: 260px;
+  background-color: var(--card-bg);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  height: 100vh;
+  z-index: 10;
+}
+
+.sidebar-header {
+  padding: 24px;
+  border-bottom: 1px solid #F0F0F0;
+}
+
+.sidebar-header h2 {
+  font-size: 20px;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 20px 0;
+}
+
+.nav-link {
+  display: block;
+  padding: 14px 24px;
+  font-size: 15px;
+  color: var(--text-main);
+  font-weight: 500;
+  transition: all var(--transition);
+  border-left: 4px solid transparent;
+}
+
+.nav-link:hover {
+  background-color: #FAFAFA;
+  color: var(--primary);
+}
+
+.nav-link.active {
+  background-color: #FFF0F0;
+  color: var(--primary);
+  border-left-color: var(--primary);
+}
+
+.sidebar-footer {
+  padding: 24px;
+  border-top: 1px solid #F0F0F0;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 12px;
+  background: white;
+  border: 1px solid #EBEBEB;
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.logout-btn:hover {
+  border-color: #D32F2F;
+  color: #D32F2F;
+  background-color: #FFF0F0;
+}
+
+.dashboard-main {
+  flex: 1;
+  margin-left: 260px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.dashboard-header {
+  height: 72px;
+  background-color: var(--card-bg);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.dashboard-header h1 {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.admin-badge {
+  background-color: #E0F2F1;
+  color: var(--secondary);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.dashboard-content {
+  padding: 40px;
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .dashboard-sidebar {
+    transform: translateX(-100%);
+    transition: transform var(--transition);
+  }
+  .dashboard-main {
+    margin-left: 0;
+  }
+}

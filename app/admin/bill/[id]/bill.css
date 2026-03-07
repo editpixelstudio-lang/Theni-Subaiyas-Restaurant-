@@ -1,0 +1,137 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: white;
+  color: black;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.thermal-bill {
+  width: 80mm; /* Standard 80mm thermal paper */
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0 0 4px 0;
+  text-transform: uppercase;
+}
+
+.bill-header {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.bill-header p {
+  margin: 2px 0;
+  font-size: 12px;
+}
+
+.divider {
+  text-align: center;
+  margin: 8px 0;
+  font-size: 12px;
+  letter-spacing: -1px;
+}
+
+.bill-meta {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bill-meta div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.bill-meta span {
+  font-weight: bold;
+}
+
+.bill-items {
+  width: 100%;
+  font-size: 12px;
+  border-collapse: collapse;
+}
+
+.bill-items th {
+  text-align: left;
+  border-bottom: 1px dashed #000;
+  padding-bottom: 4px;
+}
+
+.bill-items td {
+  padding: 4px 0;
+  vertical-align: top;
+}
+
+.item-name {
+  width: 60%;
+  padding-right: 4px;
+  word-wrap: break-word;
+}
+
+.item-qty {
+  width: 20%;
+  text-align: center;
+}
+
+.item-price {
+  width: 20%;
+  text-align: right;
+}
+
+.bill-totals {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.main-total {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.payment-mode {
+  text-align: right;
+  font-size: 12px;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+.bill-footer {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.bill-footer p {
+  margin: 4px 0;
+}
+
+.qr-wrapper {
+  margin-top: 10px;
+}
+
+.qr-wrapper img {
+  width: 80px;
+  height: 80px;
+}
+
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+  }
+}

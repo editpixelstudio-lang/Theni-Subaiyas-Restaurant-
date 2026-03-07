@@ -1,0 +1,225 @@
+.live-orders-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.live-orders-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 24px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.live-orders-header h2 {
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.live-orders-header p {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin: 0;
+}
+
+.sound-btn {
+  background-color: #FFF3E0;
+  color: #FF8F00;
+  border: 1px solid #FFE0B2;
+  padding: 10px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.sound-btn:hover {
+  background-color: #FFE0B2;
+}
+
+.sound-badge {
+  background-color: #E8F5E9;
+  color: #2E7D32;
+  padding: 10px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  border: 1px solid #C8E6C9;
+}
+
+.orders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.order-card {
+  background: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-top: 4px solid #EBEBEB;
+  transition: transform 0.2s ease;
+}
+
+.order-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.order-card.status-received { border-top-color: var(--primary); }
+.order-card.status-preparing { border-top-color: #FFB300; }
+.order-card.status-ready { border-top-color: #4CAF50; }
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-badge {
+  background-color: var(--primary);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.order-time {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.order-meta {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dashed #EBEBEB;
+  padding-bottom: 12px;
+}
+
+.order-id {
+  font-family: monospace;
+  color: var(--text-muted);
+}
+
+.order-amount {
+  font-weight: 700;
+  color: var(--text-main);
+  font-size: 18px;
+}
+
+.order-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 80px;
+}
+
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.order-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid #F0F0F0;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.action-buttons button {
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.action-buttons button:hover {
+  opacity: 0.9;
+}
+
+.btn-action.prepare { background-color: #FFF3E0; color: #E65100; }
+.btn-action.ready { background-color: #E8F5E9; color: #2E7D32; }
+.btn-action.serve { background-color: #ECEFF1; color: #455A64; }
+.btn-action.whatsapp-bill { background-color: #E8F5E9; color: #25D366; border: 1px solid #C8E6C9; margin-top: 8px; }
+
+.no-phone-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px;
+  background: white;
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-size: 16px;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: var(--text-muted);
+}
+
+.past-orders-section {
+  background: white;
+  padding: 24px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-top: 20px;
+}
+
+.past-orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.past-order-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  background-color: #FAFAFA;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 500;
+}
