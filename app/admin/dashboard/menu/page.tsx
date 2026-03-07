@@ -243,7 +243,17 @@ export default function MenuManagement() {
               </div>
 
               <div className="form-group full-width">
-                <label>Image Upload</label>
+                <label>Image URL (Recommended for Vercel)</label>
+                <input 
+                  type="text" 
+                  placeholder="https://example.com/food-image.jpg"
+                  value={editingItem.imageUrl || ''} 
+                  onChange={e => setEditingItem({...editingItem, imageUrl: e.target.value})}
+                />
+              </div>
+
+              <div className="form-group full-width">
+                <label>Image Upload (Local Only)</label>
                 <input 
                   type="file" 
                   accept="image/*" 

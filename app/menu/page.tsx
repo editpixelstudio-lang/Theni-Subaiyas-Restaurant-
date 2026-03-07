@@ -110,7 +110,7 @@ function CustomerMenu() {
         setIsCartOpen(false);
 
         if (paymentMethod === 'UPI') {
-          const restaurantUpi = process.env.NEXT_PUBLIC_UPI_ID || 'thenisubaiyas@upi';
+          const restaurantUpi = process.env.NEXT_PUBLIC_UPI_ID || 'kadamalairamesh-1@oksbi';
           const upiUrl = `upi://pay?pa=${restaurantUpi}&pn=TheniSubaiyas&am=${cartTotal}&cu=INR&tn=Order%20${data.order.orderId}`;
           setPendingOrderId({ id: data.order._id, orderId: data.order.orderId, upiUrl });
           setShowUpiModal(true);
@@ -175,7 +175,7 @@ function CustomerMenu() {
               <h3>{item.name}</h3>
               <p className="food-desc">{item.description}</p>
               <div className="food-meta">
-                <span className="food-price">₹{item.price}</span>
+                <span className="food-price">₹{Number(item.price).toFixed(0)}</span>
                 <button className="add-btn" onClick={() => addToCart(item)}>+</button>
               </div>
             </div>

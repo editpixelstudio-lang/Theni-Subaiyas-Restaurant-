@@ -33,6 +33,9 @@ export async function POST(req: Request) {
 
   } catch (error) {
     console.error('Upload Error:', error);
-    return NextResponse.json({ success: false, error: 'Failed to upload image' }, { status: 500 });
+    return NextResponse.json({ 
+      success: false, 
+      error: 'Uploads are disabled on Vercel. Please use an "Image URL" instead.' 
+    }, { status: 500 });
   }
 }
