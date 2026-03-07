@@ -10,6 +10,7 @@ interface Order {
   items: { name: string; quantity: number; price: number }[];
   totalAmount: number;
   paymentMethod: string;
+  paymentStatus: string;
   createdAt: string;
 }
 
@@ -37,6 +38,10 @@ export default function BillPrint({ params }: { params: { id: string } }) {
         <p>Authentic South Indian Cuisine</p>
         <p>123 Main Street, City Center</p>
         <p>Phone: +91 98765 43210</p>
+        <div className="divider">================================</div>
+        <div className={`bill-status-badge ${order.paymentStatus.toLowerCase()}`}>
+          {order.paymentStatus === 'Paid' ? '★ PAID ★' : '★ AMOUNT DUE ★'}
+        </div>
         <div className="divider">================================</div>
       </div>
 
@@ -76,7 +81,7 @@ export default function BillPrint({ params }: { params: { id: string } }) {
           <span>₹{order.totalAmount}</span>
         </div>
         <div className="payment-mode">
-          Paid via: {order.paymentMethod}
+          Status: {order.paymentStatus} | via {order.paymentMethod}
         </div>
       </div>
 

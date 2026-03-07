@@ -8,7 +8,11 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   await dbConnect();
   try {
     const body = await req.json();
-    const updatedOrder = await Order.findByIdAndUpdate(params.id, { status: body.status }, { new: true });
+    const updateData: any = {};
+    if (body.status) updateData.status = body.status;
+    if (body.paymentStatus) updateData.paymentStatus = body.paymentStatus;
+
+    const updatedOrder = await Order.findByIdAndUpdate(params.id, updateData, { new: true });
     
     if (!updatedOrder) {
         return NextResponse.json({ success: false, error: 'Order not found' }, { status: 404 });

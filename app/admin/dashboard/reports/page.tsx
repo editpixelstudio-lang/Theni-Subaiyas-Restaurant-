@@ -105,8 +105,9 @@ export default function Reports() {
                 <td className="amount-col">₹{order.totalAmount}</td>
                 <td>
                   <span className={`badge ${order.paymentStatus.toLowerCase()}`}>
-                    {order.paymentMethod} - {order.paymentStatus}
+                    {order.paymentStatus}
                   </span>
+                  <div className="pay-method-small">{order.paymentMethod}</div>
                 </td>
                 <td>
                   <button onClick={() => openBillPrint(order._id)} className="btn-print">

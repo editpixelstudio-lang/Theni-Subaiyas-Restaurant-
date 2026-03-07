@@ -9,6 +9,7 @@ interface Order {
   tableNumber: number;
   totalAmount: number;
   status: 'Received' | 'Preparing' | 'Ready' | 'Served';
+  paymentStatus: string;
 }
 
 export default function OrderTracking({ params }: { params: { id: string } }) {
@@ -64,9 +65,24 @@ export default function OrderTracking({ params }: { params: { id: string } }) {
     <div className={`tracking-container animate-fade-in theme-${settings?.bgVariant || 'light'}`}>
       <div className="tracking-card">
         <div className="tracking-header">
-          <h2>Order Status</h2>
+          <div className="track-id-row">
+            <h2>Order Status</h2>
+            {order.paymentStatus === 'Paid' && (
+              <span className="pay-status-badge paid">PAYMENT RECEIVED ✓</span>
+            )}
+          </div>
           <p>Order #{order.orderId} • Table {order.tableNumber}</p>
         </div>
+
+        {order.paymentStatus === 'Paid' && (
+          <div className="payment-success-alert animate-bounce-in">
+            <div className="alert-icon">💰</div>
+            <div className="alert-content">
+              <h4>Payment Successful!</h4>
+              <p>Thank you! Your payment has been verified by the restaurant.</p>
+            </div>
+          </div>
+        )}
 
         <div className="timeline">
           {statuses.map((status, index) => {

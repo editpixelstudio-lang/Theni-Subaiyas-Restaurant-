@@ -102,16 +102,24 @@ export default function LiveOrders() {
     return () => clearInterval(interval);
   }, [soundEnabled]);
 
-  const updateOrderStatus = async (id: string, newStatus: string) => {
+  const updateOrderStatus = async (id: string, newStatus?: string, newPaymentStatus?: string) => {
     try {
+      const body: any = {};
+      if (newStatus) body.status = newStatus;
+      if (newPaymentStatus) body.paymentStatus = newPaymentStatus;
+
       const res = await fetch(`/api/orders/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus }),
+        body: JSON.stringify(body),
       });
       if (res.ok) {
         // Optimistic update
-        setOrders(orders.map(o => o._id === id ? { ...o, status: newStatus as any } : o));
+        setOrders(orders.map(o => o._id === id ? { 
+          ...o, 
+          status: (newStatus as any) || o.status,
+          paymentStatus: newPaymentStatus || o.paymentStatus
+        } : o));
       }
     } catch (error) {
       console.error('Update failed', error);
@@ -163,7 +171,12 @@ export default function LiveOrders() {
               </div>
               <div className="order-meta">
                 <span className="order-id">#{order.orderId}</span>
-                <span className="order-amount">₹{order.totalAmount}</span>
+                <div className="payment-stack">
+                  <span className="order-amount">₹{order.totalAmount}</span>
+                  <span className={`pay-badge ${order.paymentStatus.toLowerCase()}`}>
+                    {order.paymentStatus}
+                  </span>
+                </div>
               </div>
               <div className="order-items">
                 {order.items.map((item, idx) => (
@@ -181,6 +194,14 @@ export default function LiveOrders() {
                 </div>
                 
                 <div className="action-buttons">
+                  {order.paymentStatus !== 'Paid' && (
+                    <button 
+                      onClick={() => updateOrderStatus(order._id, undefined, 'Paid')} 
+                      className="btn-action pay-now"
+                    >
+                      💰 Mark Paid
+                    </button>
+                  )}
                   {order.status === 'Received' && (
                     <button onClick={() => updateOrderStatus(order._id, 'Preparing')} className="btn-action prepare">
                       Start Preparing
@@ -202,20 +223,30 @@ export default function LiveOrders() {
                       onClick={() => {
                         const itemLines = order.items.map(i => `  - ${i.name} x${i.quantity} = ₹${i.price * i.quantity}`).join('\n');
                         const restaurantName = settings?.restaurantName || 'Theni Subaiyas';
-                        const msg = `🧾 *Bill from ${restaurantName}*\n\n*Order:* #${order.orderId}\n*Table:* ${order.tableNumber}\n\n*Items:*\n${itemLines}\n\n*Total: ₹${order.totalAmount}*\n\nThank you for dining with us! 🙏`;
+                        const payStatus = order.paymentStatus === 'Paid' ? '✅ PAID' : '❌ PENDING';
+                        const msg = `🧾 *Bill from ${restaurantName}*\n\n*Order:* #${order.orderId}\n*Table:* ${order.tableNumber}\n*Payment:* ${payStatus}\n\n*Items:*\n${itemLines}\n\n*Total: ₹${order.totalAmount}*\n\nThank you for dining with us! 🙏`;
                         window.open(`https://wa.me/91${order.customerPhone}?text=${encodeURIComponent(msg)}`, '_blank');
                       }}
                     >
-                      📲 Send Bill on WhatsApp
+                      📲 WhatsApp Bill
                     </button>
-                  ) : (
-                    <span className="no-phone-label">No phone saved</span>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </div>
           ))
         )}
+      </div>
+
+      <div className="summary-section card animate-slide-up">
+         <div className="summary-col">
+            <span className="sum-label">Pending Payments</span>
+            <span className="sum-val warning">₹{activeOrders.filter(o => o.paymentStatus !== 'Paid').reduce((a,b) => a + b.totalAmount, 0)}</span>
+         </div>
+         <div className="summary-col">
+            <span className="sum-label">Collected Today</span>
+            <span className="sum-val success">₹{orders.filter(o => o.paymentStatus === 'Paid').reduce((a,b) => a + b.totalAmount, 0)}</span>
+         </div>
       </div>
 
       {pastOrders.length > 0 && (
