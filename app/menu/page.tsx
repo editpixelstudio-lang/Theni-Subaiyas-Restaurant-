@@ -35,7 +35,7 @@ function CustomerMenu() {
   const [customerPhone, setCustomerPhone] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'Cash' | 'UPI'>('Cash');
   const [showUpiModal, setShowUpiModal] = useState(false);
-  const [pendingOrderId, setPendingOrderId] = useState<{ id: string; orderId: string; upiUrl: string } | null>(null);
+  const [pendingOrderId, setPendingOrderId] = useState<{ id: string; orderId: string; upiUrl: string; totalAmount: number } | null>(null);
   const [settings, setSettings] = useState<{ 
     restaurantName: string; 
     logoUrl: string; 
@@ -129,16 +129,18 @@ function CustomerMenu() {
 
       if (res.ok) {
         const data = await res.json();
+        const currentTotal = cartTotal;
         localStorage.setItem('activeOrderId', data.order._id);
         setActiveOrderId(data.order._id);
         setCart([]);
         setIsCartOpen(false);
+        setCustomerPhone(''); // Clear phone after successful order
 
         if (paymentMethod === 'UPI') {
           const restaurantUpi = settings?.upiId || process.env.NEXT_PUBLIC_UPI_ID || 'kadamalairamesh-1@oksbi';
-          // Use raw string first, will be encoded for the QR API
-          const upiUrl = `upi://pay?pa=${restaurantUpi}&pn=${encodeURIComponent(settings?.restaurantName || 'TheniSubaiyas')}&am=${cartTotal}&cu=INR&tn=Order ${data.order.orderId}`;
-          setPendingOrderId({ id: data.order._id, orderId: data.order.orderId, upiUrl });
+          // Use currentTotal instead of cartTotal which is now 0
+          const upiUrl = `upi://pay?pa=${restaurantUpi}&pn=${encodeURIComponent(settings?.restaurantName || 'TheniSubaiyas')}&am=${currentTotal}&cu=INR&tn=${encodeURIComponent('Order ' + data.order.orderId)}`;
+          setPendingOrderId({ id: data.order._id, orderId: data.order.orderId, upiUrl, totalAmount: currentTotal });
           setShowUpiModal(true);
         } else {
           router.push(`/menu/track/${data.order._id}`);
@@ -319,7 +321,7 @@ function CustomerMenu() {
             </div>
 
             <div className="upi-amount-display">
-              ₹{Number(cartTotal).toFixed(0)}
+              ₹{Number(pendingOrderId.totalAmount).toFixed(0)}
             </div>
 
             <a
