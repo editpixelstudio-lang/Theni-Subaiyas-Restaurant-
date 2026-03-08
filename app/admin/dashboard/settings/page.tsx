@@ -14,7 +14,8 @@ interface Settings {
   gradientStart: string;
   gradientEnd: string;
   bgVariant: 'light' | 'dark' | 'glass';
-  headerColor: string;
+  headerGradientStart: string;
+  headerGradientEnd: string;
 }
 
 export default function SettingsPage() {
@@ -29,7 +30,8 @@ export default function SettingsPage() {
     gradientStart: '#E53935',
     gradientEnd: '#B71C1C',
     bgVariant: 'light',
-    headerColor: '#1A1A2E'
+    headerGradientStart: '#1A1A2E',
+    headerGradientEnd: '#0F3460'
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -193,17 +195,33 @@ export default function SettingsPage() {
             </div>
 
             <div className="form-group">
-              <label>Header / Top Bar Color</label>
+              <label>Header Gradient Start</label>
               <div className="color-picker-wrap">
                 <input 
                   type="color" 
-                  value={settings.headerColor} 
-                  onChange={e => setSettings({...settings, headerColor: e.target.value})}
+                  value={settings.headerGradientStart} 
+                  onChange={e => setSettings({...settings, headerGradientStart: e.target.value})}
                 />
                 <input 
                   type="text" 
-                  value={settings.headerColor} 
-                  onChange={e => setSettings({...settings, headerColor: e.target.value})}
+                  value={settings.headerGradientStart} 
+                  onChange={e => setSettings({...settings, headerGradientStart: e.target.value})}
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Header Gradient End</label>
+              <div className="color-picker-wrap">
+                <input 
+                  type="color" 
+                  value={settings.headerGradientEnd} 
+                  onChange={e => setSettings({...settings, headerGradientEnd: e.target.value})}
+                />
+                <input 
+                  type="text" 
+                  value={settings.headerGradientEnd} 
+                  onChange={e => setSettings({...settings, headerGradientEnd: e.target.value})}
                 />
               </div>
             </div>

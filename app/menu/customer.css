@@ -26,7 +26,8 @@
   /* Dynamic Mesh Gradient Variables (Synced from Admin Settings) */
   --grad-start: #E53935;
   --grad-end: #B71C1C;
-  --header-bg: #1A1A2E;
+  --header-grad-start: #1A1A2E;
+  --header-grad-end: #0F3460;
   
   --glass: rgba(255, 255, 255, 0.7);
   --glass-border: rgba(255, 255, 255, 0.4);
@@ -105,7 +106,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(var(--primary-rgb), 0.9);
+  background: linear-gradient(135deg, var(--header-grad-start) 0%, var(--header-grad-end) 100%);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   color: white;
@@ -532,7 +533,7 @@ body {
 
 .sidebar-header {
   padding: 40px 24px 30px;
-  background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
+  background: linear-gradient(135deg, var(--header-grad-start), var(--header-grad-end));
   color: white;
   position: relative;
 }

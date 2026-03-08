@@ -76,6 +76,12 @@ function CustomerMenu() {
         if (data.settings.accentColor) {
           document.documentElement.style.setProperty('--accent', data.settings.accentColor);
         }
+        if (data.settings.headerGradientStart) {
+          document.documentElement.style.setProperty('--header-grad-start', data.settings.headerGradientStart);
+        }
+        if (data.settings.headerGradientEnd) {
+          document.documentElement.style.setProperty('--header-grad-end', data.settings.headerGradientEnd);
+        }
       }
     }).catch(err => {
       console.error("Error fetching settings:", err);
