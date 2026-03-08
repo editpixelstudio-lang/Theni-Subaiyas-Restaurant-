@@ -37,6 +37,7 @@ function CustomerMenu() {
   const [paymentMethod, setPaymentMethod] = useState<'Cash' | 'UPI'>('Cash');
   const [showUPIModal, setShowUPIModal] = useState(false);
   const [pendingOrderId, setPendingOrderId] = useState<string | null>(null);
+  const [paymentAmount, setPaymentAmount] = useState<number>(0);
   const [settings, setSettings] = useState<{ 
     restaurantName: string; 
     logoUrl: string; 
@@ -137,6 +138,7 @@ function CustomerMenu() {
       if (res.ok) {
         const data = await res.json();
         const currentTotal = cartTotal;
+        setPaymentAmount(currentTotal);
         localStorage.setItem('activeOrderId', data.order._id);
         setActiveOrderId(data.order._id);
         setCart([]);
@@ -342,19 +344,19 @@ function CustomerMenu() {
             
             <div className="upi-qr-wrap">
               <img 
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`upi://pay?pa=${settings?.upiId || 'kadamalairamesh-1@oksbi'}&pn=${settings?.restaurantName || 'Theni Subaiyas'}&am=${cartTotal.toFixed(2)}&cu=INR`)}`} 
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`upi://pay?pa=${settings?.upiId || 'kadamalairamesh-1@oksbi'}&pn=${settings?.restaurantName || 'Theni Subaiyas'}&am=${paymentAmount.toFixed(2)}&cu=INR`)}`} 
                 alt="UPI QR Code" 
                 className="upi-qr-img"
               />
               <p className="upi-scan-hint">Scan with GPay, PhonePe, or Paytm</p>
             </div>
 
-            <div className="upi-amount-display">₹{cartTotal.toFixed(0)}</div>
+            <div className="upi-amount-display">₹{paymentAmount.toFixed(0)}</div>
 
             {/* Mobile Intent Deep Links */}
             <div className="mobile-pay-options">
               <a 
-                href={`upi://pay?pa=${settings?.upiId || 'kadamalairamesh-1@oksbi'}&pn=${settings?.restaurantName || 'Theni Subaiyas'}&am=${cartTotal.toFixed(2)}&cu=INR`}
+                href={`upi://pay?pa=${settings?.upiId || 'kadamalairamesh-1@oksbi'}&pn=${settings?.restaurantName || 'Theni Subaiyas'}&am=${paymentAmount.toFixed(2)}&cu=INR`}
                 className="btn-pay-now"
               >
                 🚀 Open GPay / PhonePe
