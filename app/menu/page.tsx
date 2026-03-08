@@ -171,34 +171,12 @@ function CustomerMenu() {
   }
 
   return (
-    <div className={`customer-app theme-${activeBgVariant}`}>
-      <div className="theme-switcher">
-        <div className={`theme-opt light ${activeBgVariant === 'light' ? 'active' : ''}`} onClick={() => setActiveBgVariant('light')}>☀️</div>
-        <div className={`theme-opt dark ${activeBgVariant === 'dark' ? 'active' : ''}`} onClick={() => setActiveBgVariant('dark')}>🌙</div>
-        <div className={`theme-opt glass ${activeBgVariant === 'glass' ? 'active' : ''}`} onClick={() => setActiveBgVariant('glass')}>💎</div>
-      </div>
       <header className="mobile-header">
         {settings?.logoUrl && <img src={settings.logoUrl} alt="Logo" className="restaurant-logo-header" />}
         <div className="header-info">
-          <div className="header-top-row">
-            <button className="btn-home-nav" onClick={() => router.push('/')}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-              </svg>
-            </button>
-            <h1>{settings?.restaurantName || 'Theni Subaiyas'} <span className="version-badge">v2.0</span></h1>
-          </div>
+          <h1>{settings?.restaurantName || 'Theni Subaiyas'} <span className="version-badge">v2.1</span></h1>
           <p className="table-info">Table: <span>{tableNumber}</span></p>
         </div>
-        {activeOrderId && (
-          <button 
-            className="btn-track-active" 
-            onClick={() => router.push(`/menu/track/${activeOrderId}`)}
-          >
-            📋 Track Order
-          </button>
-        )}
       </header>
 
       <div className="categories-scrollable">
@@ -333,22 +311,59 @@ function CustomerMenu() {
         </div>
       </div>
 
-      {/* Custom UPI Scan & Pay Modal */}
+      {/* Bottom Navigation Bar */}
+      <nav className="bottom-nav">
+        <button className="nav-item" onClick={() => router.push('/')}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="24" height="24">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          <span>Home</span>
+        </button>
+        <button className="nav-item active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="24" height="24">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+          <span>Menu</span>
+        </button>
+        {activeOrderId ? (
+          <button className="nav-item" onClick={() => router.push(`/menu/track/${activeOrderId}`)}>
+            <div className="nav-pulse-badge"></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="24" height="24">
+              <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+              <polyline points="13 2 13 9 20 9"></polyline>
+            </svg>
+            <span>My Order</span>
+          </button>
+        ) : (
+          <button className="nav-item opacity-40">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="24" height="24">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <span>No Order</span>
+          </button>
+        )}
+      </nav>
+
+      {/* Custom UPI Scan & Pay Modal - Overhauled Priority */}
       {showUPIModal && (
-        <div className="upi-modal-overlay">
-          <div className="upi-modal">
+        <div className="upi-modal-overlay high-priority">
+          <div className="upi-modal main-focus">
             <div className="upi-modal-header">
-              <h2>Scan & Pay</h2>
-              <p>Direct payment to restaurant (Zero Fee)</p>
+              <h2>Secure Payment</h2>
+              <p>Scan to complete your order</p>
             </div>
             
             <div className="upi-qr-wrap">
               <img 
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`upi://pay?pa=${settings?.upiId || 'kadamalairamesh-1@oksbi'}&pn=${settings?.restaurantName || 'Theni Subaiyas'}&am=${paymentAmount.toFixed(2)}&cu=INR`)}`} 
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`upi://pay?pa=${settings?.upiId || 'kadamalairamesh-1@oksbi'}&pn=${settings?.restaurantName || 'Theni Subaiyas'}&am=${paymentAmount.toFixed(2)}&cu=INR`)}`} 
                 alt="UPI QR Code" 
                 className="upi-qr-img"
               />
-              <p className="upi-scan-hint">Scan with GPay, PhonePe, or Paytm</p>
+              <p className="upi-scan-hint">Use any UPI app (GPay, PhonePe, Paytm)</p>
             </div>
 
             <div className="upi-amount-display">₹{paymentAmount.toFixed(0)}</div>
@@ -357,20 +372,21 @@ function CustomerMenu() {
             <div className="mobile-pay-options">
               <a 
                 href={`upi://pay?pa=${settings?.upiId || 'kadamalairamesh-1@oksbi'}&pn=${settings?.restaurantName || 'Theni Subaiyas'}&am=${paymentAmount.toFixed(2)}&cu=INR`}
-                className="btn-pay-now"
+                className="btn-pay-now big-btn"
               >
-                🚀 Open GPay / PhonePe
+                🚀 PAY WITH MOBILE APP
               </a>
             </div>
 
-            <button 
-              className="btn-paid" 
-              onClick={() => router.push(`/menu/track/${pendingOrderId}`)}
-            >
-              ✅ I have Paid
-            </button>
-            
-            <button className="btn-cancel-pay" onClick={() => setShowUPIModal(false)}>Cancel</button>
+            <div className="upi-modal-footer">
+              <button 
+                className="btn-paid primary-confirm" 
+                onClick={() => router.push(`/menu/track/${pendingOrderId}`)}
+              >
+                ✅ I HAVE PAID SUCCESSFUL
+              </button>
+              <button className="btn-cancel-pay secondary-cancel" onClick={() => setShowUPIModal(false)}>Go Back</button>
+            </div>
           </div>
         </div>
       )}
