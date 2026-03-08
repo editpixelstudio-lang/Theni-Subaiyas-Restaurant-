@@ -806,6 +806,20 @@
   box-shadow: 0 4px 12px rgba(0,137,123,0.3);
 }
 
+.mobile-pay-options {
+  width: 100%;
+}
+
+.btn-cancel-pay {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
 /* Theme Switcher */
 .theme-switcher {
   position: absolute;

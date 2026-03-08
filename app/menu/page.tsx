@@ -34,7 +34,9 @@ function CustomerMenu() {
   const [activeOrderId, setActiveOrderId] = useState<string | null>(null);
   const [cartBouncing, setCartBouncing] = useState(false);
   const [customerPhone, setCustomerPhone] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState<'Cash'>('Cash');
+  const [paymentMethod, setPaymentMethod] = useState<'Cash' | 'UPI'>('Cash');
+  const [showUPIModal, setShowUPIModal] = useState(false);
+  const [pendingOrderId, setPendingOrderId] = useState<string | null>(null);
   const [settings, setSettings] = useState<{ 
     restaurantName: string; 
     logoUrl: string; 
@@ -141,7 +143,12 @@ function CustomerMenu() {
         setIsCartOpen(false);
         setCustomerPhone(''); // Clear phone after successful order
 
-        router.push(`/menu/track/${data.order._id}`);
+        if (paymentMethod === 'UPI') {
+          setShowUPIModal(true);
+          setPendingOrderId(data.order._id);
+        } else {
+          router.push(`/menu/track/${data.order._id}`);
+        }
       } else {
         alert('Failed to place order. Please ask staff.');
       }
@@ -278,10 +285,16 @@ function CustomerMenu() {
 
               <div className="payment-options">
                 <p>Payment Method</p>
+                <div className="pay-methods">
                   <label className={`radio-label ${paymentMethod === 'Cash' ? 'selected' : ''}`}>
-                    <input type="radio" name="payType" value="Cash" checked={paymentMethod === 'Cash'} readOnly />
+                    <input type="radio" name="payType" value="Cash" checked={paymentMethod === 'Cash'} onChange={() => setPaymentMethod('Cash')} />
                     <span>💵 Pay at Counter / Cash</span>
                   </label>
+                  <label className={`radio-label ${paymentMethod === 'UPI' ? 'selected' : ''}`}>
+                    <input type="radio" name="payType" value="UPI" checked={paymentMethod === 'UPI'} onChange={() => setPaymentMethod('UPI')} />
+                    <span>📱 Pay Online (Scan QR / GPay)</span>
+                  </label>
+                </div>
 
                 <div className="phone-input-wrap">
                   <label>Your Mobile Number (for bill on WhatsApp)</label>
@@ -317,6 +330,48 @@ function CustomerMenu() {
           )}
         </div>
       </div>
+
+      {/* Custom UPI Scan & Pay Modal */}
+      {showUPIModal && (
+        <div className="upi-modal-overlay">
+          <div className="upi-modal">
+            <div className="upi-modal-header">
+              <h2>Scan & Pay</h2>
+              <p>Direct payment to restaurant (Zero Fee)</p>
+            </div>
+            
+            <div className="upi-qr-wrap">
+              <img 
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`upi://pay?pa=${settings?.upiId || 'kadamalairamesh-1@oksbi'}&pn=${settings?.restaurantName || 'Theni Subaiyas'}&am=${cartTotal.toFixed(2)}&cu=INR`)}`} 
+                alt="UPI QR Code" 
+                className="upi-qr-img"
+              />
+              <p className="upi-scan-hint">Scan with GPay, PhonePe, or Paytm</p>
+            </div>
+
+            <div className="upi-amount-display">₹{cartTotal.toFixed(0)}</div>
+
+            {/* Mobile Intent Deep Links */}
+            <div className="mobile-pay-options">
+              <a 
+                href={`upi://pay?pa=${settings?.upiId || 'kadamalairamesh-1@oksbi'}&pn=${settings?.restaurantName || 'Theni Subaiyas'}&am=${cartTotal.toFixed(2)}&cu=INR`}
+                className="btn-pay-now"
+              >
+                🚀 Open GPay / PhonePe
+              </a>
+            </div>
+
+            <button 
+              className="btn-paid" 
+              onClick={() => router.push(`/menu/track/${pendingOrderId}`)}
+            >
+              ✅ I have Paid
+            </button>
+            
+            <button className="btn-cancel-pay" onClick={() => setShowUPIModal(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
 
     </div>
   );
