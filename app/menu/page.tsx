@@ -38,6 +38,7 @@ function CustomerMenu() {
   const [showUPIModal, setShowUPIModal] = useState(false);
   const [pendingOrderId, setPendingOrderId] = useState<string | null>(null);
   const [paymentAmount, setPaymentAmount] = useState<number>(0);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [settings, setSettings] = useState<{ 
     restaurantName: string; 
     logoUrl: string; 
@@ -172,6 +173,13 @@ function CustomerMenu() {
 
   return (
       <header className="mobile-header">
+        <button className="hamburger-btn" onClick={() => setIsSidebarOpen(true)}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="24" height="24">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
         {settings?.logoUrl && <img src={settings.logoUrl} alt="Logo" className="restaurant-logo-header" />}
         <div className="header-info">
           <h1>{settings?.restaurantName || 'Theni Subaiyas'} <span className="version-badge">v2.1</span></h1>
@@ -391,6 +399,50 @@ function CustomerMenu() {
         </div>
       )}
 
+      {/* Customer Sidebar Drawer */}
+      <div className={`sidebar-overlay ${isSidebarOpen ? 'open' : ''}`} onClick={() => setIsSidebarOpen(false)}>
+        <div className="sidebar-drawer" onClick={e => e.stopPropagation()}>
+          <div className="sidebar-header">
+            {settings?.logoUrl && <img src={settings.logoUrl} alt="Logo" className="sidebar-logo" />}
+            <h3>{settings?.restaurantName || 'Theni Subaiyas'}</h3>
+            <button className="close-sidebar" onClick={() => setIsSidebarOpen(false)}>×</button>
+          </div>
+
+          <div className="sidebar-content">
+            <div className="sidebar-section">
+              <p className="section-label">Appearance</p>
+              <div className="theme-switcher-inline">
+                <div className={`theme-opt light ${activeBgVariant === 'light' ? 'active' : ''}`} onClick={() => setActiveBgVariant('light')}>☀️ Light</div>
+                <div className={`theme-opt dark ${activeBgVariant === 'dark' ? 'active' : ''}`} onClick={() => setActiveBgVariant('dark')}>🌙 Dark</div>
+                <div className={`theme-opt glass ${activeBgVariant === 'glass' ? 'active' : ''}`} onClick={() => setActiveBgVariant('glass')}>💎 Glass</div>
+              </div>
+            </div>
+
+            <div className="sidebar-links">
+              <button className="sidebar-link" onClick={() => { router.push('/'); setIsSidebarOpen(false); }}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="18" height="18"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                Home
+              </button>
+              <button className="sidebar-link active" onClick={() => setIsSidebarOpen(false)}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="18" height="18"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                Menu
+              </button>
+              {activeOrderId && (
+                <button className="sidebar-link" onClick={() => { router.push(`/menu/track/${activeOrderId}`); setIsSidebarOpen(false); }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="18" height="18"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                  My Orders
+                </button>
+              )}
+            </div>
+
+            <div className="sidebar-footer">
+              <p className="footer-label">Contact Us</p>
+              <p>📍 {settings?.address || 'Theni, Tamil Nadu'}</p>
+              <p>📞 {settings?.mobileNumber || '9876543210'}</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
