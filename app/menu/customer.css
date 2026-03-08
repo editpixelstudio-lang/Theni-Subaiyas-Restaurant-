@@ -313,6 +313,28 @@ body {
 
 .food-price::before { content: '₹'; margin-right: 2px; font-size: 14px; opacity: 0.8; }
 
+/* ---- Theme Variants ---- */
+.theme-dark {
+  --bg-light: #0F0F1A;
+  --card-bg: rgba(30, 30, 46, 0.7);
+  --text-dark: #F8F9FA;
+  --text-muted: #A0A0A0;
+  --glass: rgba(30, 30, 50, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --white: #1A1A2E;
+  --shadow-sm: 0 4px 12px rgba(0,0,0,0.2);
+  --shadow-md: 0 12px 24px rgba(0,0,0,0.4);
+}
+
+.theme-dark .mesh-bg {
+  opacity: 0.3;
+}
+
+.theme-glass .customer-app {
+  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-end) 100%);
+  background-attachment: fixed;
+}
+
 .add-btn {
   width: 36px;
   height: 36px;

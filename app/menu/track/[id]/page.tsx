@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import './track.css';
+import '../../customer.css';
 
 interface Order {
   _id: string;
@@ -75,10 +76,11 @@ export default function OrderTracking({ params }: { params: { id: string } }) {
 
   return (
     <div className={`tracking-container animate-fade-in theme-${settings?.bgVariant || 'light'}`}>
+      <div className="mesh-bg"></div>
       <div className="tracking-card">
         <div className="tracking-header">
           <div className="track-id-row">
-            <h2>Order Status</h2>
+            <h2>Order Status <span className="version-badge">v2.4</span></h2>
             <span className={`pay-status-badge ${order.paymentStatus.toLowerCase()}`}>
               {order.paymentStatus === 'Paid' ? 'PAYMENT RECEIVED ✓' : 'PAYMENT PENDING ⏳'}
             </span>

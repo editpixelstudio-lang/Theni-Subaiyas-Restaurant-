@@ -1,34 +1,47 @@
+/* =========================================
+   THENI SUBAIYAS - Order Tracking (v2.4)
+   💎 Glassmorphism & High-End Redesign
+   ========================================= */
+
 .tracking-loading {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  font-family: var(--font-family);
-  color: var(--text-muted);
+  gap: 20px;
+  background: #F8F9FA;
+  color: #6B7280;
+  font-family: var(--font);
 }
 
 .tracking-container {
   min-height: 100vh;
-  background-color: var(--bg-color);
-  padding: 24px 20px;
+  position: relative;
+  padding: 32px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: var(--font-family);
+  z-index: 1;
 }
 
+/* Tracking Card - Premium Glass */
 .tracking-card {
-  background: white;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   width: 100%;
   max-width: 500px;
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
   padding: 32px 24px;
+  animation: slideInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .tracking-header {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
 }
 
 .track-id-row {
@@ -36,220 +49,222 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .pay-status-badge {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
-  padding: 4px 10px;
-  border-radius: 20px;
+  padding: 5px 12px;
+  border-radius: 100px;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .pay-status-badge.paid {
-  background: #E8F5E9;
+  background: rgba(46, 125, 50, 0.1);
   color: #2E7D32;
-  border: 1px solid #C8E6C9;
+  border: 1px solid rgba(46, 125, 50, 0.2);
 }
 
 .pay-status-badge.pending {
-  background: #FFF3E0;
+  background: rgba(230, 81, 0, 0.1);
   color: #E65100;
-  border: 1px solid #FFE0B2;
+  border: 1px solid rgba(230, 81, 0, 0.2);
 }
 
 .tracking-header h2 {
-  font-size: 24px;
-  color: var(--primary);
-  margin-bottom: 8px;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin: 0;
+  letter-spacing: -0.5px;
 }
 
 .tracking-header p {
   color: var(--text-muted);
-  font-size: 15px;
-  font-weight: 500;
-  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 8px;
 }
 
+/* Payment Success Alert */
 .payment-success-alert {
-  background: #E8F5E9;
-  border: 1.5px solid #C8E6C9;
+  background: rgba(46, 125, 50, 0.08);
+  border: 1px solid rgba(46, 125, 50, 0.1);
   border-radius: var(--radius-md);
-  padding: 16px;
+  padding: 20px;
   margin-bottom: 32px;
   display: flex;
   gap: 16px;
   align-items: center;
 }
 
-.alert-icon {
-  font-size: 24px;
-}
+.alert-icon { font-size: 28px; }
 
 .alert-content h4 {
   margin: 0;
   color: #1B5E20;
-  font-size: 16px;
+  font-size: 15px;
+  font-weight: 700;
 }
 
 .alert-content p {
   margin: 4px 0 0 0;
   color: #2E7D32;
-  font-size: 13px;
-  line-height: 1.4;
+  font-size: 12.5px;
+  line-height: 1.5;
 }
 
-@keyframes bounceIn {
-  0% { transform: scale(0.9); opacity: 0; }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-.animate-bounce-in {
-  animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
-}
-
+/* Modern Timeline */
 .timeline {
   display: flex;
   flex-direction: column;
   gap: 32px;
   position: relative;
   margin-bottom: 40px;
+  padding-left: 8px;
 }
 
 .timeline-item {
   display: flex;
-  gap: 20px;
+  gap: 24px;
   position: relative;
 }
 
 .timeline-connector {
   position: absolute;
   left: 17px;
-  top: 36px;
+  top: 40px;
   bottom: -32px;
   width: 2px;
-  background-color: #EBEBEB;
+  background-color: rgba(0,0,0,0.06);
   z-index: 1;
 }
 
-.timeline-item:last-child .timeline-connector {
-  display: none;
-}
+.theme-dark .timeline-connector { background-color: rgba(255,255,255,0.1); }
+
+.timeline-item:last-child .timeline-connector { display: none; }
 
 .timeline-icon {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background-color: #F5F5F5;
-  color: #BDBDBD;
+  background-color: var(--white);
+  color: var(--text-muted);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  font-size: 16px;
+  font-weight: 800;
+  font-size: 14px;
   z-index: 2;
-  transition: all 0.3s;
-  box-shadow: 0 0 0 4px white;
+  transition: var(--transition);
+  border: 2px solid #EDEDED;
 }
 
+.theme-dark .timeline-icon { border-color: rgba(255,255,255,0.05); }
+
 .timeline-item.completed .timeline-icon {
-  background-color: var(--secondary);
+  background-color: #00897B;
   color: white;
+  border-color: #00897B;
+  box-shadow: 0 4px 12px rgba(0, 137, 123, 0.2);
 }
 
 .timeline-item.completed .timeline-connector {
-  background-color: var(--secondary);
+  background-color: #00897B;
 }
 
 .timeline-item.current .timeline-icon {
   background-color: var(--primary);
   color: white;
-  box-shadow: 0 0 0 4px rgba(255, 90, 95, 0.2);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(var(--primary-rgb), 0.15);
+  animation: pulsePrimary 2s infinite;
 }
 
-.timeline-content {
-  flex: 1;
-  padding-top: 6px;
+@keyframes pulsePrimary {
+  0% { box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(var(--primary-rgb), 0); }
+  100% { box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0); }
 }
+
+.timeline-content { flex: 1; }
 
 .timeline-content h4 {
   margin: 0 0 4px 0;
   font-size: 16px;
-  color: #BDBDBD;
+  font-weight: 700;
+  color: var(--text-muted);
+  transition: color 0.3s;
 }
 
 .timeline-content p {
   margin: 0;
   font-size: 13px;
-  color: #BDBDBD;
-}
-
-.timeline-item.completed .timeline-content h4 {
-  color: var(--text-main);
-}
-
-.timeline-item.completed .timeline-content p {
   color: var(--text-muted);
+  opacity: 0.8;
 }
 
+.timeline-item.completed .timeline-content h4,
 .timeline-item.current .timeline-content h4 {
-  color: var(--primary);
-  font-weight: 700;
+  color: var(--text-dark);
 }
 
+.timeline-item.current .timeline-content h4 { color: var(--primary); }
+
+/* Footer & Buttons */
 .tracking-footer {
   text-align: center;
-  border-top: 1px dashed #EBEBEB;
-  padding-top: 24px;
+  border-top: 1px solid rgba(0,0,0,0.05);
+  padding-top: 32px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
 }
 
+.theme-dark .tracking-footer { border-color: rgba(255,255,255,0.05); }
+
 .tracking-footer p {
   color: var(--text-muted);
   font-size: 14px;
-  margin: 0;
+  font-weight: 500;
+  margin-bottom: 8px;
 }
 
 .btn-whatsapp {
   background: #25D366;
   color: white;
   border: none;
-  padding: 12px 20px;
-  border-radius: var(--radius-md);
-  font-weight: 600;
+  padding: 16px 24px;
+  border-radius: 100px;
+  font-weight: 700;
   font-size: 15px;
   cursor: pointer;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 6px rgba(37, 211, 102, 0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2);
+  transition: var(--transition);
 }
 
-.btn-whatsapp:active {
-  transform: scale(0.96);
-  box-shadow: 0 2px 4px rgba(37, 211, 102, 0.2);
-}
+.btn-whatsapp:active { transform: scale(0.96); }
 
 .btn-back-menu {
-  background: white;
-  border: 1px solid var(--primary);
-  color: var(--primary);
-  padding: 10px 20px;
-  border-radius: var(--radius-md);
-  font-weight: 600;
+  background: transparent;
+  border: 1px solid rgba(0,0,0,0.1);
+  color: var(--text-dark);
+  padding: 14px 24px;
+  border-radius: 100px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: var(--transition);
   width: 100%;
+  font-size: 14px;
 }
 
-.btn-back-menu:hover {
-  background: var(--primary);
-  color: white;
-}
+.theme-dark .btn-back-menu { border-color: rgba(255,255,255,0.1); }
+
+.btn-back-menu:active { background: rgba(0,0,0,0.03); }
