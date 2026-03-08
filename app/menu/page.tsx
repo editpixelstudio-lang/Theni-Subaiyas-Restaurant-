@@ -85,9 +85,12 @@ function CustomerMenu() {
       .then(res => res.json())
       .then(data => {
         if (data && data.items) {
+          console.log("Fetched items count:", data.items.length);
           const availableItems = data.items.filter((i: MenuItem) => i.isAvailable);
+          console.log("Available items count:", availableItems.length);
           setItems(availableItems);
           const uniqueCategories = Array.from(new Set(availableItems.map((i: MenuItem) => i.category))) as string[];
+          console.log("Calculated categories:", uniqueCategories);
           setCategories(['All', ...uniqueCategories]);
         } else {
           console.error("Invalid menu data:", data);
