@@ -353,12 +353,6 @@ function CustomerMenu() {
             </div>
 
             <div className="upi-modal-footer">
-              <button 
-                className="btn-paid primary-confirm" 
-                onClick={() => router.push(`/menu/track/${pendingOrderId}`)}
-              >
-                ✅ I HAVE PAID SUCCESSFUL
-              </button>
               <button className="btn-cancel-pay secondary-cancel" onClick={() => setShowUPIModal(false)}>Go Back</button>
             </div>
           </div>
