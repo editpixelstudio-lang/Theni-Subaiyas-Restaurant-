@@ -138,8 +138,35 @@
   font-size: 20px;
   font-weight: 800;
   color: white;
-  margin: 0 0 2px 0;
+  margin: 0;
   letter-spacing: -0.3px;
+  flex: 1;
+}
+
+.header-top-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.btn-home-nav {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-home-nav:active {
+  transform: scale(0.9);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .table-info {

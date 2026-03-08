@@ -34,7 +34,7 @@ function CustomerMenu() {
   const [activeOrderId, setActiveOrderId] = useState<string | null>(null);
   const [cartBouncing, setCartBouncing] = useState(false);
   const [customerPhone, setCustomerPhone] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState<'Cash' | 'UPI'>('Cash');
+  const [paymentMethod, setPaymentMethod] = useState<'Cash'>('Cash');
   const [settings, setSettings] = useState<{ 
     restaurantName: string; 
     logoUrl: string; 
@@ -171,7 +171,15 @@ function CustomerMenu() {
       <header className="mobile-header">
         {settings?.logoUrl && <img src={settings.logoUrl} alt="Logo" className="restaurant-logo-header" />}
         <div className="header-info">
-          <h1>{settings?.restaurantName || 'Theni Subaiyas'} <span className="version-badge">v2.0</span></h1>
+          <div className="header-top-row">
+            <button className="btn-home-nav" onClick={() => router.push('/')}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+            </button>
+            <h1>{settings?.restaurantName || 'Theni Subaiyas'} <span className="version-badge">v2.0</span></h1>
+          </div>
           <p className="table-info">Table: <span>{tableNumber}</span></p>
         </div>
         {activeOrderId && (
@@ -270,16 +278,10 @@ function CustomerMenu() {
 
               <div className="payment-options">
                 <p>Payment Method</p>
-                <div className="pay-methods">
                   <label className={`radio-label ${paymentMethod === 'Cash' ? 'selected' : ''}`}>
-                    <input type="radio" name="payType" value="Cash" checked={paymentMethod === 'Cash'} onChange={() => setPaymentMethod('Cash')} />
+                    <input type="radio" name="payType" value="Cash" checked={paymentMethod === 'Cash'} readOnly />
                     <span>💵 Pay at Counter / Cash</span>
                   </label>
-                  <label className={`radio-label ${paymentMethod === 'UPI' ? 'selected' : ''}`}>
-                    <input type="radio" name="payType" value="UPI" checked={paymentMethod === 'UPI'} onChange={() => setPaymentMethod('UPI')} />
-                    <span>📱 Pay Online (UPI/Card/NetBanking)</span>
-                  </label>
-                </div>
 
                 <div className="phone-input-wrap">
                   <label>Your Mobile Number (for bill on WhatsApp)</label>
