@@ -3,7 +3,6 @@
 import { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import './customer.css';
-import Script from 'next/script';
 
 interface MenuItem {
   _id: string;
@@ -142,47 +141,7 @@ function CustomerMenu() {
         setIsCartOpen(false);
         setCustomerPhone(''); // Clear phone after successful order
 
-        if (paymentMethod === 'UPI') {
-          // 1. Create Razorpay Order
-          const rzpRes = await fetch('/api/razorpay', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ amount: currentTotal, orderId: data.order._id }),
-          });
-          const rzpData = await rzpRes.json();
-
-          if (!rzpData.success) {
-            alert(`[NEW v2] Payment gateway error: ${rzpData.error || 'Failed to initialize'}. Please check your Razorpay API keys in .env.local.`);
-            router.push(`/menu/track/${data.order._id}`);
-            return;
-          }
-
-          // 2. Open Razorpay Checkout
-          const options = {
-            key: rzpData.key_id,
-            amount: rzpData.order.amount,
-            currency: rzpData.order.currency,
-            name: settings?.restaurantName || 'Theni Subaiyas',
-            description: `Payment for Order #${data.order.orderId}`,
-            order_id: rzpData.order.id,
-            handler: function (response: any) {
-              // Payment success - Webhook will handle DB update, 
-              // but we redirect customer to tracking immediately
-              router.push(`/menu/track/${data.order._id}`);
-            },
-            prefill: {
-              contact: customerPhone,
-            },
-            theme: {
-              color: settings?.primaryColor || '#ff5a5f',
-            },
-          };
-
-          const rzp = new (window as any).Razorpay(options);
-          rzp.open();
-        } else {
-          router.push(`/menu/track/${data.order._id}`);
-        }
+        router.push(`/menu/track/${data.order._id}`);
       } else {
         alert('Failed to place order. Please ask staff.');
       }
@@ -204,7 +163,6 @@ function CustomerMenu() {
 
   return (
     <div className={`customer-app theme-${activeBgVariant}`}>
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
       <div className="theme-switcher">
         <div className={`theme-opt light ${activeBgVariant === 'light' ? 'active' : ''}`} onClick={() => setActiveBgVariant('light')}>☀️</div>
         <div className={`theme-opt dark ${activeBgVariant === 'dark' ? 'active' : ''}`} onClick={() => setActiveBgVariant('dark')}>🌙</div>
@@ -341,13 +299,8 @@ function CustomerMenu() {
                       <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       <path d="M9 12L11 14L15 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    <span>100% Secure SSL Encryption</span>
+                    <span>Order Safely with Theni Subaiyas</span>
                   </div>
-                  {paymentMethod === 'UPI' && (
-                    <div className="powered-by">
-                      Powered by <span className="razorpay-text">Razorpay</span>
-                    </div>
-                  )}
                 </div>
               </div>
 

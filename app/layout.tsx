@@ -22,7 +22,6 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {children}
-        <script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
       </body>
     </html>
   );
