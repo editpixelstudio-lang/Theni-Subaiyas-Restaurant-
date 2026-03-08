@@ -194,6 +194,7 @@ function CustomerMenu() {
 
   return (
     <div className={`customer-app theme-${activeBgVariant}`}>
+      <div className="mesh-bg"></div>
       <header className="mobile-header">
         <button className="hamburger-btn" onClick={() => setIsSidebarOpen(true)}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="24" height="24">
@@ -204,7 +205,7 @@ function CustomerMenu() {
         </button>
         {settings?.logoUrl && <img src={settings.logoUrl} alt="Logo" className="restaurant-logo-header" />}
         <div className="header-info">
-          <h1>{settings?.restaurantName || 'Theni Subaiyas'} <span className="version-badge">v2.3</span></h1>
+          <h1>{settings?.restaurantName || 'Theni Subaiyas'} <span className="version-badge">v2.4</span></h1>
           <p className="table-info">Table: <span>{tableNumber}</span></p>
         </div>
       </header>
