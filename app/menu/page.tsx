@@ -59,7 +59,6 @@ function CustomerMenu() {
       if (data.success && data.settings) {
         setSettings(data.settings);
         setActiveBgVariant(data.settings.bgVariant || 'light');
-        // Inject dynamic theme
         // Inject dynamic theme variables
         if (data.settings.primaryColor) {
           document.documentElement.style.setProperty('--primary', data.settings.primaryColor);
@@ -76,22 +75,27 @@ function CustomerMenu() {
         if (data.settings.accentColor) {
           document.documentElement.style.setProperty('--accent', data.settings.accentColor);
         }
-        if (data.settings.headerColor) {
-          document.documentElement.style.setProperty('--header-bg', data.settings.headerColor);
-        }
       }
-    }).catch(err => console.error("Error fetching settings:", err));
+    }).catch(err => {
+      console.error("Error fetching settings:", err);
+    });
 
     fetch('/api/menu')
       .then(res => res.json())
       .then(data => {
-        const availableItems = data.items.filter((i: MenuItem) => i.isAvailable);
-        setItems(availableItems);
-        const uniqueCategories = Array.from(new Set(availableItems.map((i: MenuItem) => i.category))) as string[];
-        setCategories(['All', ...uniqueCategories]);
-        if (uniqueCategories.length > 0 && !uniqueCategories.includes(activeCategory)) {
-           // Keep 'All' as default
+        if (data && data.items) {
+          const availableItems = data.items.filter((i: MenuItem) => i.isAvailable);
+          setItems(availableItems);
+          const uniqueCategories = Array.from(new Set(availableItems.map((i: MenuItem) => i.category))) as string[];
+          setCategories(['All', ...uniqueCategories]);
+        } else {
+          console.error("Invalid menu data:", data);
+          setItems([]);
         }
+      })
+      .catch(err => {
+        console.error("Error fetching menu:", err);
+        setItems([]);
       })
       .finally(() => setLoading(false));
 
