@@ -44,6 +44,7 @@ function CustomerMenu() {
     logoUrl: string; 
     upiId: string; 
     mobileNumber: string;
+    address?: string;
     primaryColor: string;
     accentColor: string;
     bgVariant: string;
@@ -172,6 +173,7 @@ function CustomerMenu() {
   }
 
   return (
+    <div className={`customer-app theme-${activeBgVariant}`}>
       <header className="mobile-header">
         <button className="hamburger-btn" onClick={() => setIsSidebarOpen(true)}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="24" height="24">
