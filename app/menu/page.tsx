@@ -56,6 +56,7 @@ function CustomerMenu() {
   useEffect(() => {
     // Fetch Settings
     fetch('/api/settings').then(res => res.json()).then(data => {
+      if (data.success && data.settings) {
         console.log("Settings fetched successfully:", data.settings);
         setSettings(data.settings);
         setActiveBgVariant(data.settings.bgVariant || 'light');
