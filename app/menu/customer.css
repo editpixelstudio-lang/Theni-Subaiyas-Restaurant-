@@ -617,24 +617,23 @@
 
 .pay-methods {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 10px;
   margin-bottom: 16px;
 }
 
 .radio-label {
-  flex: 1;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 6px;
-  padding: 12px 8px;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
   border: 2px solid #E0E0E0;
-  border-radius: 12px;
-  font-size: 13px;
+  border-radius: 14px;
+  font-size: 14px;
   cursor: pointer;
-  transition: border 0.2s;
-  text-align: center;
+  transition: all 0.2s;
 }
 
 .radio-label input {
