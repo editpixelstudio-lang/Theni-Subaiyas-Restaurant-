@@ -28,10 +28,14 @@ export async function POST(req: Request) {
     }
 
     const event = JSON.parse(body);
+    console.log(`Razorpay Webhook Received: ${event.event}`);
 
-    if (event.event === 'order.paid') {
-      const { notes } = event.payload.order.entity;
+    if (event.event === 'order.paid' || event.event === 'payment.captured') {
+      const entity = event.event === 'order.paid' ? event.payload.order.entity : event.payload.payment.entity;
+      const { notes } = entity;
       const mongodbOrderId = notes?.mongodbOrderId;
+
+      console.log(`Processing ${event.event} for MongoID: ${mongodbOrderId}`);
 
       if (mongodbOrderId) {
         const updatedOrder = await Order.findByIdAndUpdate(
@@ -44,15 +48,19 @@ export async function POST(req: Request) {
         );
 
         if (updatedOrder) {
-          console.log(`Order ${updatedOrder.orderId} marked as Paid via webhook`);
+          console.log(`✅ SUCCESS: Order ${updatedOrder.orderId} marked as PAID and PREPARING`);
+        } else {
+          console.error(`❌ ERROR: Order ${mongodbOrderId} not found in database`);
         }
+      } else {
+        console.error(`⚠️ WARNING: No mongodbOrderId found in webhook notes`);
       }
     }
 
     return NextResponse.json({ status: 'ok' }, { status: 200 });
 
   } catch (error) {
-    console.error('Webhook Error:', error);
+    console.error('CRITICAL Webhook Error:', error);
     return NextResponse.json({ error: 'Webhook failed' }, { status: 500 });
   }
 }
