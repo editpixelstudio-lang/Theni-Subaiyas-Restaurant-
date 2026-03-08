@@ -11,6 +11,8 @@ interface Settings {
   upiId: string;
   primaryColor: string;
   accentColor: string;
+  gradientStart: string;
+  gradientEnd: string;
   bgVariant: 'light' | 'dark' | 'glass';
   headerColor: string;
 }
@@ -24,6 +26,8 @@ export default function SettingsPage() {
     upiId: '',
     primaryColor: '#E53935',
     accentColor: '#FF7043',
+    gradientStart: '#E53935',
+    gradientEnd: '#B71C1C',
     bgVariant: 'light',
     headerColor: '#1A1A2E'
   });
@@ -196,6 +200,38 @@ export default function SettingsPage() {
                   type="text" 
                   value={settings.headerColor} 
                   onChange={e => setSettings({...settings, headerColor: e.target.value})}
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Gradient Start (Top)</label>
+              <div className="color-picker-wrap">
+                <input 
+                  type="color" 
+                  value={settings.gradientStart} 
+                  onChange={e => setSettings({...settings, gradientStart: e.target.value})}
+                />
+                <input 
+                  type="text" 
+                  value={settings.gradientStart} 
+                  onChange={e => setSettings({...settings, gradientStart: e.target.value})}
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Gradient End (Bottom)</label>
+              <div className="color-picker-wrap">
+                <input 
+                  type="color" 
+                  value={settings.gradientEnd} 
+                  onChange={e => setSettings({...settings, gradientEnd: e.target.value})}
+                />
+                <input 
+                  type="text" 
+                  value={settings.gradientEnd} 
+                  onChange={e => setSettings({...settings, gradientEnd: e.target.value})}
                 />
               </div>
             </div>

@@ -47,6 +47,8 @@ function CustomerMenu() {
     address?: string;
     primaryColor: string;
     accentColor: string;
+    gradientStart: string;
+    gradientEnd: string;
     bgVariant: string;
     headerColor: string;
   } | null>(null);
@@ -58,8 +60,18 @@ function CustomerMenu() {
         setSettings(data.settings);
         setActiveBgVariant(data.settings.bgVariant || 'light');
         // Inject dynamic theme
+        // Inject dynamic theme variables
         if (data.settings.primaryColor) {
           document.documentElement.style.setProperty('--primary', data.settings.primaryColor);
+        }
+        if (data.settings.gradientStart) {
+          document.documentElement.style.setProperty('--grad-start', data.settings.gradientStart);
+        }
+        if (data.settings.gradientEnd) {
+          document.documentElement.style.setProperty('--grad-end', data.settings.gradientEnd);
+        }
+        if (data.settings.headerColor) {
+          document.documentElement.style.setProperty('--header-bg', data.settings.headerColor);
         }
         if (data.settings.accentColor) {
           document.documentElement.style.setProperty('--accent', data.settings.accentColor);
@@ -184,7 +196,7 @@ function CustomerMenu() {
         </button>
         {settings?.logoUrl && <img src={settings.logoUrl} alt="Logo" className="restaurant-logo-header" />}
         <div className="header-info">
-          <h1>{settings?.restaurantName || 'Theni Subaiyas'} <span className="version-badge">v2.1</span></h1>
+          <h1>{settings?.restaurantName || 'Theni Subaiyas'} <span className="version-badge">v2.2</span></h1>
           <p className="table-info">Table: <span>{tableNumber}</span></p>
         </div>
       </header>
@@ -241,8 +253,14 @@ function CustomerMenu() {
       <div className={`cart-drawer-overlay ${isCartOpen ? 'open' : ''}`} onClick={() => setIsCartOpen(false)}>
         <div className="cart-drawer" onClick={e => e.stopPropagation()}>
           <div className="cart-header">
-            <h2>Your Order</h2>
-            <button className="close-cart" onClick={() => setIsCartOpen(false)}>×</button>
+            <div className="cart-header-left">
+              <h2>Your Order</h2>
+              <span className="cart-count-pill">{cart.length} items</span>
+            </div>
+            <div className="cart-header-actions">
+              <button className="btn-clear-cart" onClick={() => { if(confirm('Clear all items?')) setCart([]); }}>Clear All</button>
+              <button className="close-cart" onClick={() => setIsCartOpen(false)}>×</button>
+            </div>
           </div>
           
           <div className="cart-items">
