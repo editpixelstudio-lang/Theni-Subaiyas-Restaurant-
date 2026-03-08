@@ -215,7 +215,7 @@ function CustomerMenu() {
               <h3>{item.name}</h3>
               <p className="food-desc">{item.description}</p>
               <div className="food-meta">
-                <span className="food-price">₹{Number(item.price).toFixed(0)}</span>
+                <span className="food-price">{Number(item.price).toFixed(0)}</span>
                 <button className="add-btn" onClick={() => addToCart(item)}>+</button>
               </div>
             </div>
@@ -321,42 +321,6 @@ function CustomerMenu() {
         </div>
       </div>
 
-      {/* Bottom Navigation Bar */}
-      <nav className="bottom-nav">
-        <button className="nav-item" onClick={() => router.push('/')}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="24" height="24">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-            <polyline points="9 22 9 12 15 12 15 22"></polyline>
-          </svg>
-          <span>Home</span>
-        </button>
-        <button className="nav-item active">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="24" height="24">
-            <path d="M12 20h9"></path>
-            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-          </svg>
-          <span>Menu</span>
-        </button>
-        {activeOrderId ? (
-          <button className="nav-item" onClick={() => router.push(`/menu/track/${activeOrderId}`)}>
-            <div className="nav-pulse-badge"></div>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="24" height="24">
-              <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-              <polyline points="13 2 13 9 20 9"></polyline>
-            </svg>
-            <span>My Order</span>
-          </button>
-        ) : (
-          <button className="nav-item opacity-40">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="24" height="24">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="8" x2="12" y2="12"></line>
-              <line x1="12" y1="16" x2="12.01" y2="16"></line>
-            </svg>
-            <span>No Order</span>
-          </button>
-        )}
-      </nav>
 
       {/* Custom UPI Scan & Pay Modal - Overhauled Priority */}
       {showUPIModal && (
