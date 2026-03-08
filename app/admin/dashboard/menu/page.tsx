@@ -3,6 +3,11 @@
 import { useState, useEffect } from 'react';
 import './menu-management.css';
 
+interface Category {
+  _id: string;
+  name: string;
+}
+
 interface MenuItem {
   _id: string;
   name: string;
@@ -15,7 +20,10 @@ interface MenuItem {
 
 export default function MenuManagement() {
   const [items, setItems] = useState<MenuItem[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [newCatName, setNewCatName] = useState('');
   const [loading, setLoading] = useState(true);
+  const [catLoading, setCatLoading] = useState(false);
   const [editingItem, setEditingItem] = useState<Partial<MenuItem> | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -34,8 +42,19 @@ export default function MenuManagement() {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch('/api/categories');
+      const data = await res.json();
+      if (data.success) setCategories(data.categories);
+    } catch (err) {
+      console.error('Failed to fetch categories');
+    }
+  };
+
   useEffect(() => {
     fetchItems();
+    fetchCategories();
   }, []);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,13 +122,47 @@ export default function MenuManagement() {
     }
   };
 
+  const handleAddCategory = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newCatName.trim()) return;
+    setCatLoading(true);
+    try {
+      const res = await fetch('/api/categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: newCatName.trim() }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setNewCatName('');
+        fetchCategories();
+      } else {
+        alert(data.error || 'Failed to add category');
+      }
+    } catch (err) {
+      alert('Error adding category');
+    } finally {
+      setCatLoading(false);
+    }
+  };
+
+  const handleDeleteCategory = async (id: string) => {
+    if (!confirm('Are you sure? Items in this category will remain but the category tag will be gone.')) return;
+    try {
+      const res = await fetch(`/api/categories/${id}`, { method: 'DELETE' });
+      if (res.ok) fetchCategories();
+    } catch (err) {
+      console.error('Delete category error', err);
+    }
+  };
+
   const openNewModal = () => {
     setEditingItem({
       name: '',
       description: '',
       price: 0,
       imageUrl: '',
-      category: 'Biryani',
+      category: categories[0]?.name || 'General',
       isAvailable: true,
     });
     setIsModalOpen(true);
@@ -147,6 +200,28 @@ export default function MenuManagement() {
         <button className="btn btn-primary" onClick={openNewModal}>
           + Add New Item
         </button>
+      </div>
+
+      <div className="category-manager">
+        <h3>📂 Manage Categories {catLoading && <span className="loading-inline">Updating...</span>}</h3>
+        <form onSubmit={handleAddCategory} className="category-add-form">
+          <input 
+            type="text" 
+            placeholder="New Category Name (e.g. Seafood)" 
+            value={newCatName}
+            onChange={e => setNewCatName(e.target.value)}
+          />
+          <button type="submit" className="btn btn-primary" disabled={catLoading}>Add</button>
+        </form>
+        <div className="category-tags">
+          {categories.map(cat => (
+            <div key={cat._id} className="category-tag">
+              {cat.name}
+              <button className="btn-remove-cat" onClick={() => handleDeleteCategory(cat._id)}>×</button>
+            </div>
+          ))}
+          {categories.length === 0 && <p className="empty-inline">No custom categories yet.</p>}
+        </div>
       </div>
 
       <div className="menu-list">
@@ -210,14 +285,15 @@ export default function MenuManagement() {
               <div className="form-group">
                 <label>Category</label>
                 <select 
-                  value={editingItem.category || 'Biryani'} 
+                  value={editingItem.category || ''} 
                   onChange={e => setEditingItem({...editingItem, category: e.target.value})}
+                  required
                 >
-                  <option value="Biryani">Biryani</option>
-                  <option value="Meals">Meals</option>
-                  <option value="Drinks">Drinks</option>
-                  <option value="Starters">Starters</option>
-                  <option value="Desserts">Desserts</option>
+                  <option value="" disabled>Select Category</option>
+                  {categories.map(cat => (
+                    <option key={cat._id} value={cat.name}>{cat.name}</option>
+                  ))}
+                  {categories.length === 0 && <option value="General">General (Default)</option>}
                 </select>
               </div>
 
