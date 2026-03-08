@@ -146,10 +146,27 @@ body {
   letter-spacing: 0.5px;
 }
 
+/* --- Hamburger Menu Button --- */
+.hamburger-btn {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.hamburger-btn:active { transform: scale(0.9); background: rgba(255,255,255,0.25); }
+
 .table-info {
-  font-size: 12px;
+  font-size: 11px;
   opacity: 0.9;
-  margin-top: 4px;
+  margin-top: 2px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -486,32 +503,149 @@ body {
   display: flex;
   flex-direction: column;
   box-shadow: 20px 0 60px rgba(0,0,0,0.1);
+  position: relative;
 }
 
 .sidebar-overlay.open .sidebar-drawer { transform: translateX(0); }
 
 .sidebar-header {
-  padding: 40px 30px;
+  padding: 40px 24px 30px;
   background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
   color: white;
-  border-radius: 0 0 30px 0;
+  position: relative;
 }
 
-.sidebar-nav { padding: 30px 0; }
+.sidebar-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  background: white;
+  padding: 2px;
+}
+
+.sidebar-header h3 {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.close-sidebar {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.sidebar-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.sidebar-section {
+  margin-bottom: 32px;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+
+.theme-switcher-inline {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  background: #F5F5F7;
+  padding: 4px;
+  border-radius: 12px;
+}
+
+.theme-opt {
+  padding: 10px 4px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.theme-opt.active {
+  background: white;
+  color: var(--primary);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.sidebar-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
 .sidebar-link {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 18px 30px;
+  gap: 12px;
+  padding: 14px 16px;
   color: var(--text-dark);
   text-decoration: none;
   font-weight: 600;
   font-size: 15px;
-  transition: background 0.3s;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-.sidebar-link:active { background: #F8F9FA; color: var(--primary); }
+.sidebar-link svg { opacity: 0.6; }
+
+.sidebar-link.active {
+  background: #FFF0F0;
+  color: var(--primary);
+}
+
+.sidebar-link.active svg { opacity: 1; stroke: var(--primary); }
+
+.sidebar-link:active { background: #F5F5F7; }
+
+.sidebar-footer {
+  padding-top: 24px;
+  border-top: 1px solid #F0F0F0;
+}
+
+.footer-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.sidebar-footer p {
+  font-size: 13px;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.sidebar-footer p span { color: var(--primary); }
 
 /* ---- Checkout & Pay ---- */
 .checkout-btn {
