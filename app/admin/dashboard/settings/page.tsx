@@ -44,6 +44,7 @@ export default function SettingsPage() {
       const res = await fetch('/api/settings');
       const data = await res.json();
       if (data.success && data.settings) {
+        console.log("Admin settings loaded:", data.settings);
         setSettings(prev => ({
           ...prev,
           ...data.settings
@@ -85,7 +86,7 @@ export default function SettingsPage() {
   return (
     <div className="settings-container animate-fade-in">
       <div className="settings-header">
-        <h2>Restaurant Settings <span className="version-badge">v2.2</span></h2>
+        <h2>Restaurant Settings <span className="version-badge">v2.3</span></h2>
         <p>Manage your restaurant profile and global details</p>
       </div>
 

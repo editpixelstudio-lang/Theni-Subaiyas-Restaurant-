@@ -46,6 +46,7 @@ export default function MenuManagement() {
     try {
       const res = await fetch('/api/categories');
       const data = await res.json();
+      console.log("Fetched categories:", data.categories);
       if (data.success) setCategories(data.categories);
     } catch (err) {
       console.error('Failed to fetch categories');
@@ -194,7 +195,7 @@ export default function MenuManagement() {
     <div className="menu-management animate-fade-in">
       <div className="menu-header">
         <div>
-          <h2>Menu Management</h2>
+          <h2>Menu Management <span className="version-badge">v2.3</span></h2>
           <p>Manage your food categories and items</p>
         </div>
         <button className="btn btn-primary" onClick={openNewModal}>

@@ -56,7 +56,7 @@ function CustomerMenu() {
   useEffect(() => {
     // Fetch Settings
     fetch('/api/settings').then(res => res.json()).then(data => {
-      if (data.success && data.settings) {
+        console.log("Settings fetched successfully:", data.settings);
         setSettings(data.settings);
         setActiveBgVariant(data.settings.bgVariant || 'light');
         // Inject dynamic theme variables
@@ -200,7 +200,7 @@ function CustomerMenu() {
         </button>
         {settings?.logoUrl && <img src={settings.logoUrl} alt="Logo" className="restaurant-logo-header" />}
         <div className="header-info">
-          <h1>{settings?.restaurantName || 'Theni Subaiyas'} <span className="version-badge">v2.2</span></h1>
+          <h1>{settings?.restaurantName || 'Theni Subaiyas'} <span className="version-badge">v2.3</span></h1>
           <p className="table-info">Table: <span>{tableNumber}</span></p>
         </div>
       </header>
